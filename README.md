@@ -46,7 +46,7 @@ Opponents will be assigned an area of the map and only move through that sector.
 <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\PerroNoBaCut.png" alt="Pablo, Main Character">
 
 ![Dog](..\assets\PerroNoBaCut.png)
-![Dog](..\assets\PuercoespinNoBackCut)
+![Puercoespin](..\assets\PuercoespinNoBackCut)
 
 
 
@@ -57,15 +57,15 @@ The game is set in a suburb or suburban area. It has houses and large gardens. S
 ### Sketch of the World:
 
 
- <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\MapSketch.png" alt="Pablo, Main Character">
+ <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\MapSketch.png" alt="MapSketch">
 
 
 
 ### Menus:
  
-<image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu1.jpeg" alt="Pablo, Main Character">
+<image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu1.jpeg" alt="Main Menu">
 
-<image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu2.jpeg" alt="Pablo, Main Character">
+<image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu2.jpeg" alt="Menu2">
 
 
 ### Controls:
