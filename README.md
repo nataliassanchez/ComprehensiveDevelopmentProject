@@ -30,6 +30,7 @@ The main character of the game is Pablo. He is a young adult who wants to earn a
 ### Sketch of Main Character:
 
 
+![PablonoBackground](https://user-images.githubusercontent.com/92798821/212987904-f239cee5-7475-4d5d-8192-f343ab69e085.png)
 
 ![Main Character](..\assets\PuercoespinNoBackCut.png)
 
@@ -44,9 +45,11 @@ Opponents will be assigned an area of the map and only move through that sector.
 ### Sketch of Opponents:
    
 <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\PerroNoBaCut.png" alt="Pablo, Main Character">
+![PerroNoBaCut](https://user-images.githubusercontent.com/92798821/212987943-1544c3a7-4590-431c-8b76-19f18dfeece9.png)
 
 ![Dog](..\assets\PerroNoBaCut.png)
 ![Puercoespin](..\assets\PuercoespinNoBackCut)
+![PuercoespinNoBackCut](https://user-images.githubusercontent.com/92798821/212987951-550506b5-4885-4f19-aad1-74d502ec6e73.png)
 
 
 
@@ -58,14 +61,17 @@ The game is set in a suburb or suburban area. It has houses and large gardens. S
 
 
  <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\MapSketch.png" alt="MapSketch">
+![MapSketch](https://user-images.githubusercontent.com/92798821/212988008-c4dd0b0e-ff5d-4b80-8428-23c07e8c808a.png)
 
 
 
 ### Menus:
  
 <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu1.jpeg" alt="Main Menu">
+![Menu1Of](https://user-images.githubusercontent.com/92798821/212988034-c5a54f4b-589b-49eb-b42f-b057b3fb6281.png)
 
 <image src= "D:\GEX2023\C++\Assignments\Assignment 2 - GamePitch\assets\Menu2.jpeg" alt="Menu2">
+![Menu2](https://user-images.githubusercontent.com/92798821/212988046-8f5d9622-8626-4f13-8f38-98c7abc6bd42.jpeg)
 
 
 ### Controls:
