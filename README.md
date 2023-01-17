@@ -32,7 +32,6 @@ The main character of the game is Pablo. He is a young adult who wants to earn a
 
 ![PablonoBackground](https://user-images.githubusercontent.com/92798821/212987904-f239cee5-7475-4d5d-8192-f343ab69e085.png)
 
-![Main Character](..\assets\PuercoespinNoBackCut.png)
 
 
 ### Opponents: 
