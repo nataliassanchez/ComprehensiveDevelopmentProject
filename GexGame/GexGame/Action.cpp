@@ -1,6 +1,4 @@
-//
-// Created by David Burchill on 2022-10-19.
-//
+
 
 #include "Action.h"
 

@@ -14,6 +14,8 @@
 
 #include "Scene_Game.h"
 #include "Scene_Menu.h"
+#include "MusicPlayer.h"
+#include "SoundPlayer.h"
 
 
 const sf::Time GameEngine::TIME_PER_FRAME = sf::seconds((1.f / 60.f));
@@ -22,7 +24,7 @@ const sf::Time GameEngine::TIME_PER_FRAME = sf::seconds((1.f / 60.f));
 GameEngine::GameEngine(const std::string& configPath) {
     init(configPath);
     m_assets.loadFromFile(configPath);
-    m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y), "GEX GAME");
+    m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y), "SUNDAY LAWN");
 
     m_statisticsText.setFont(m_assets.getFont("Arial"));
     m_statisticsText.setPosition(15.0f, 15.0f);
@@ -41,10 +43,9 @@ void GameEngine::createMenu() {
     m_sceneMap[SceneID::MENU] = menuScene;
 
     // add items to menu_scene
-    menuScene->registerItem(SceneID::GEO, "Geo Wars Proto");
-    menuScene->registerItem(SceneID::NONE, "Level 2");
-    menuScene->registerItem(SceneID::NONE, "Level 3");
-    menuScene->registerItem(SceneID::FTR, "Gex Fighters");
+    menuScene->registerItem(SceneID::LEVELS, "Start");
+    menuScene->registerItem(SceneID::NONE, "Options");
+
 }
 
 
@@ -54,7 +55,7 @@ void GameEngine::createFactories() {
                 return std::make_shared<Scene_Menu>(this);
             });
 
-    m_factories[SceneID::GEO] = std::function<Sptr()> (
+    m_factories[SceneID::LEVELS] = std::function<Sptr()> (
             [this]() -> Sptr {
                 return std::make_shared<Scene_Game>(this, "../assets/level1.txt");
             });
@@ -83,6 +84,12 @@ void GameEngine::init(const std::string &configPath) {
             if (token == "Window") {
                 config >> m_windowSize.x >> m_windowSize.y;
             }
+            else if (token == "Sound") {
+                std::string key, path;
+                config >> key >> path;
+
+                SoundPlayer::getInstance().loadBuffer(key, path);
+            }
             config >> token;
         }
     }
@@ -92,25 +99,29 @@ void GameEngine::init(const std::string &configPath) {
 
 
 void GameEngine::run() {
+    
+    MusicPlayer::getInstance().play("menuTheme2");
+    MusicPlayer::getInstance().setVolume(15);
+
+    const sf::Time SPF = sf::seconds(1.0f / 60.f);  // seconds per frame for 60 fps 
 
     sf::Clock clock;
-    sf::Time timeSinceLastUpdate{sf::Time::Zero};
+    sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
-    while (isRunning()) {
+    // as is from youtube video
+    while (isRunning())
+    {
+        sUserInput();								// get user input
 
-        sUserInput();
-
-        sf::Time elapsedTime = clock.restart();
-        timeSinceLastUpdate += elapsedTime;
-        while (timeSinceLastUpdate > TIME_PER_FRAME) {
-            timeSinceLastUpdate -= TIME_PER_FRAME;
-
-            sUserInput();
-            currentScene()->update(TIME_PER_FRAME);				// update world
+        timeSinceLastUpdate += clock.restart();
+        while (timeSinceLastUpdate > SPF)
+        {
+            currentScene()->update();				// update world
+            timeSinceLastUpdate -= SPF;
         }
 
-        updateStatistics(elapsedTime);
-        currentScene()->sRender();
+        currentScene()->sRender();					// render world
+    
 
         m_window.setView(m_window.getDefaultView());
         m_window.draw(m_statisticsText);
@@ -197,3 +208,4 @@ void  GameEngine::quitLevel() {
 void    GameEngine::backLevel() {
     changeScene(SceneID::MENU, false);
 }
+

@@ -51,12 +51,14 @@ private:
     void                            sAnimation(sf::Time dt);
     void                            sGuideMissiles(sf::Time dt);
     void                            sAutoPilot(const sf::Time &dt);
+    void                            sRemoveEntitiesOutOfGame();
 
     // helper functions
     void                            spawnEnemies();
     sf::Vector2f                    findClosestEnemy(sf::Vector2f mPos);
     void                            spawnEnemy( std::string type, sf::Vector2f pos);
     void                            spawnEnemies(std::string type, float offset, size_t numPlanes);
+    void                            spawnPickUp(NttPtr e, int type);
     void                            createBullet(sf::Vector2f pos, bool isEnemy);
     void                            registerActions();
     void                            init(const std::string& configPath);
@@ -72,11 +74,13 @@ private:
     void                            checkBulletCollision();
     void                            checkPlaneCollision();
     void                            checkIfDead(NttPtr e);
+    void                            checkPickUpCollision();
+    bool                            isGameWon();
 
 public:
     Scene_GexFighter(GameEngine* gameEngine, const std::string& configPath);
 
-    void		                    update(sf::Time dt) override;
+    void		                    update() override;
     void		                    sDoAction(const Action& action) override;
     void		                    sRender() override;
 

@@ -1,12 +1,10 @@
-//
-// Created by David Burchill on 2022-10-21.
-//
-
 #include <SFML/Window/Keyboard.hpp>
 #include "Scene_Menu.h"
 #include "GameEngine.h"
 #include "Scene_Game.h"
 #include <memory>
+#include "Utilities.h"
+#include "Components.h"
 
 
 
@@ -18,20 +16,21 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 
 void Scene_Menu::init()
 {
-    registerAction(sf::Keyboard::W,			"UP");
-    registerAction(sf::Keyboard::Up,		"UP");
+    registerAction(sf::Keyboard::D,			"LEFT");
+    registerAction(sf::Keyboard::Left,		"LEFT");
 
-    registerAction(sf::Keyboard::S,			"DOWN");
-    registerAction(sf::Keyboard::Down,	 	"DOWN");
+    registerAction(sf::Keyboard::A,			"RIGHT");
+    registerAction(sf::Keyboard::Right,	 	"RIGHT");
 
-    registerAction(sf::Keyboard::D,			"PLAY");
+    registerAction(sf::Keyboard::Enter,			"PLAY");
 
     registerAction(sf::Keyboard::Escape,	"QUIT");
 
-    m_title = "Geo Wars";
+    m_title = "Sunday Lawn";
 
+    m_logo.setTexture(m_game->assets().getTexture("Logo"));
+    m_menuText.setFont(m_game->assets().getFont("MegaSurprise"));
 
-    m_menuText.setFont(m_game->assets().getFont("Megaman"));
 
     const size_t CHAR_SIZE{ 64 };
     m_menuText.setCharacterSize(CHAR_SIZE);
@@ -44,37 +43,49 @@ void Scene_Menu::registerItem(SceneID key, std::string item) {
 }
 
 
-void Scene_Menu::update(sf::Time dt) {
+void Scene_Menu::update() {
     m_entityManager.update();
 }
 
 
 void Scene_Menu::sRender() {
+
+    m_background.setTexture(m_game->assets().getTexture("Lawn"));
+
     sf::View view = m_game->window().getView();
     view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
     m_game->window().setView(view);
 
-    static const sf::Color selectedColor(255, 255, 255);
-    static const sf::Color normalColor(0, 0, 0);
-    static const sf::Color backgroundColor(100, 100, 255);
+    m_background.setPosition(0.f, 0.f);
+
+    static const sf::Color selectedColor(255, 164, 032);
+    static const sf::Color normalColor(255, 255, 255);
+    static const sf::Color backgroundColor(34,139,34);
 
     sf::Text footer("UP: W    DOWN: S   PLAY:D    QUIT: ESC",
-                    m_game->assets().getFont("Megaman"),
+                    m_game->assets().getFont("MegaSurprise"),
                     20);
     footer.setFillColor(normalColor);
-    footer.setPosition(32, 700);
+    centerOrigin(footer);
+    footer.setPosition(view.getCenter().x, 920);
 
     m_game->window().clear(backgroundColor);
-
+    m_game->window().draw(m_background);
     m_menuText.setFillColor(normalColor);
     m_menuText.setString(m_title);
-    m_menuText.setPosition(10, 10);
+    centerOrigin(m_menuText);
+    m_menuText.setPosition(view.getCenter().x, view.getSize().y / 4);
     m_game->window().draw(m_menuText);
+    centerOrigin(m_logo);
+    m_logo.setPosition(view.getCenter());
+    m_game->window().draw(m_logo);
+    
 
     for (size_t i{ 0 }; i < m_menuItems.size(); ++i)
     {
         m_menuText.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
-        m_menuText.setPosition(32, 32 + (i+1) * 96);
+        centerOrigin(m_menuText);
+        m_menuText.setPosition(view.getCenter().x + (160* i), view.getCenter().y + m_logo.getLocalBounds().height);
         m_menuText.setString(m_menuItems.at(i).second);
         m_game->window().draw(m_menuText);
     }
@@ -87,11 +98,11 @@ void Scene_Menu::sRender() {
 void Scene_Menu::sDoAction(const Action &action) {
     if (action.type() == "START")
     {
-        if (action.name() == "UP")
+        if (action.name() == "RIGHT")
         {
             m_menuIndex = (m_menuIndex + m_menuItems.size() - 1) % m_menuItems.size();
         }
-        else if (action.name() == "DOWN")
+        else if (action.name() == "LEFT")
         {
             m_menuIndex = (m_menuIndex + 1) % m_menuItems.size();
         }

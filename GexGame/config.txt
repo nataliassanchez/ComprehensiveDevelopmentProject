@@ -1,33 +1,59 @@
 # GameEngine Config
 
-Window  1024 768
+Window  1920 1088
 
-Font    Arial      ../assets/fonts/arial.ttf
-Font    Mario      ../assets/fonts/mario.ttf
-Font    Megaman    ../assets/fonts/megaman.ttf
+Font    Arial      	../assets/fonts/arial.ttf
+Font    Mario      	../assets/fonts/mario.ttf
+Font    Megaman    	../assets/fonts/megaman.ttf
+Font	MegaSurprise 	../assets/fonts/megaSurprise.ttf
+
+Texture Lawn        ../assets/media/Background.jpg
+Texture Logo        ../assets/media/logo.png
+
+Texture TextPablo   ../assets/media/PabloSprite.png
+Texture TextStand   ../assets/media/PabloStand.png
+Texture Block1	    ../assets/media/Block1.png
+Texture TextTileFlw ../assets/media/TileFlw.png
+Texture TextPrcpine ../assets/media/PuercopineSprite.png
+Texture TextGrass1  ../assets/media/Pasto.png
+Texture TextGrass2  ../assets/media/Pasto002.png
+Texture TextGrass3  ../assets/media/Pasto003.png 
+Texture TextRock    ../assets/media/rock.png
+Texture TextBush1   ../assets/media/bush1.png
+Texture TextBush2   ../assets/media/bush2.png
+Texture TextWater   ../assets/media/water.png
+Texture TextWater   ../assets/media/water.png
+Texture TextFront   ../assets/media/PabloFront.png
+Texture TextBack   ../assets/media/PabloBack.png
+Texture TextShort   ../assets/media/ShortGrass.png
+Texture TextFence   ../assets/media/fence.png
+Texture TextFence2   ../assets/media/fence2.png 
+Texture TextFence3   ../assets/media/fence3.png 
+Texture TextHouse    ../assets/media/house.png 
+
+#JSON                ../assets/media/Entities.json
 
 
-Texture Entities    ../assets/media/Entities.png
-Texture Jungle      ../assets/media/Jungle.png
-Texture Finish      ../assets/media/FinishLine.png
-
-
-JSON                ../assets/media/Entities.json
-
-
+# ANIMATIONS
+Animation Run	  	TextPablo   8 5
+Animation Stand		TextStand   1 0
+Animation Tile1   	Block1      1 0
+Animation Tile2   	TextTileFlw 1 0
+Animation Grass1  	TextGrass1  1 0
+Animation Grass2  	TextGrass2  1 0
+Animation Grass3  	TextGrass3  1 0 
+Animation Bush1   	TextBush1   1 0 
+Animation Bush2   	TextBush2   1 0 
+Animation Rock		TextRock    1 0 
+Animation Water		TextWater   1 0 
+Animation Front	        TextFront   1 0 
+Animation Back          TextBack    1 0 
+Animation Short		TextShort   1 0
+Animation Fence		TextFence   1 0
+Animation Fence2	TextFence2   1 0
+Animation Fence3	TextFence3   1 0
+Animation House		TextHouse    1 0
 #
-#  Animation    Name            Texture     Speed   Repeats
-Animation       EagleStr        Entities    1        yes
-Animation       EagleRgt        Entities    1        yes
-Animation       EagleLft        Entities    1        yes
-Animation       Bullet          Entities    1        yes
-Animation       Missile         Entities    1        yes
-Animation       explosion       Entities    12       no
-Animation       FireRate        Entities    1        yes
-Animation       FireSpread      Entities    1        yes
-Animation       HealthRefill    Entities    1        yes
-Animation       MissileRefill   Entities    1        yes
-Animation       Particle        Entities    1        yes
-Animation       Raptor          Entities    1        yes
-Animation       Avenger         Entities    1        yes
+# SOUNDS
+
 

@@ -26,6 +26,7 @@ protected:
     EntityManager	    m_entityManager;
     ActionMap		    m_actions;
     bool			    m_isPaused{false};
+    bool                m_isGameOver{ false };
     bool			    m_hasEnded{false};
     size_t			    m_currentFrame{ 0 };
 
@@ -35,7 +36,7 @@ protected:
 public:
     explicit Scene(GameEngine* gameEngine);
 
-    virtual void		update(sf::Time dt) = 0;
+    virtual void		update() = 0;
     virtual void		sDoAction(const Action& action) = 0;
     virtual void		sRender() = 0;
 

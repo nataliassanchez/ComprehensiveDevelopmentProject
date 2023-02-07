@@ -6,50 +6,71 @@
 #include "Utilities.h"
 
 
-Animation::Animation(const std::string &name,
-                     const sf::Texture &t,
-                     std::vector<sf::IntRect> frames,
-                     sf::Time tpf,
-                     bool repeats)
-        : m_name(name)
-        , m_frames(frames)
-        , m_timePerFrame(tpf)
-        , m_isRepeating(repeats)
-        , m_countDown(sf::Time::Zero)
-        , m_sprite(t, m_frames[0])
+Animation::Animation()
+{}
+
+Animation::Animation(const std::string& name, const sf::Texture& t)
+	: Animation(name, t, 1, 0)
+{}
+
+Animation::Animation(const std::string& name, const sf::Texture& t, size_t frameCount, size_t speed)
+	: m_name(name)
+	, m_sprite(t)
+	, m_frameCount(frameCount)
+	, m_currentFrame(0)
+	, m_speed(speed)
 {
-    centerOrigin(m_sprite);
+	m_size = sf::Vector2f(static_cast<float>(t.getSize().x) / frameCount, static_cast<float>(t.getSize().y));
+	m_sprite.setOrigin(m_size.x / 2.f, m_size.y / 2.f);
+	m_sprite.setTextureRect(sf::IntRect(std::floor(m_currentFrame * m_size.x), 0, m_size.x, m_size.y));
 }
 
+void Animation::update(bool repeat)
+{
 
-void Animation::update(sf::Time dt) {
+	// increament Frame
+	m_currentFrame += 1;
 
-    m_countDown -= dt;
-    if (m_countDown < sf::Time::Zero) {
-        m_countDown = m_timePerFrame;
+	size_t frame{ 0 };
+	if (m_speed > 0) // has animation
+	{
+		frame = (m_currentFrame / m_speed);   // new frame in animation
+		if (frame >= m_frameCount)
+		{
+			if (repeat)
+			{
+				frame %= m_frameCount;
+			}
+			else
+			{
+				m_hasEnded = true;
+				frame = m_frameCount - 1;
+			}
+		}
+	}
 
-        m_currentFrame += 1;
-        if ( m_currentFrame == m_frames.size()  && !m_isRepeating )
-            return;  // on the last frame of non-repeating animaton, leave it
-        else
-            m_currentFrame = (m_currentFrame % m_frames.size());
-
-        m_sprite.setTextureRect(m_frames[m_currentFrame]);
-        centerOrigin(m_sprite);
-    }
+	// set frame rect
+	sf::IntRect frameRect(static_cast<int>(m_size.x * frame), static_cast<int>(0), static_cast<int>(m_size.x), static_cast<int>(m_size.y)); // left, top, width, height
+	m_sprite.setTextureRect(frameRect);
 }
 
-
-bool Animation::hasEnded() const {
-    return (m_currentFrame >= m_frames.size());
+bool Animation::hasEnded() const
+{
+	return m_hasEnded;
 }
 
-
-const std::string &Animation::getName() const {
-    return m_name;
+const std::string& Animation::getName() const
+{
+	// // O: insert return statement here
+	return m_name;
 }
 
+const sf::Vector2f& Animation::getSize() const
+{
+	return m_size;
+}
 
-sf::Sprite &Animation::getSprite() {
-    return m_sprite;
+sf::Sprite& Animation::getSprite()
+{
+	return m_sprite;
 }

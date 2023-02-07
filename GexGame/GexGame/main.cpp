@@ -5,22 +5,14 @@
 //  Year / Term:    Fall 2022
 //  File name:      sfml.cpp
 // 
-//  Student name:   George P. Burdell
-//  Student email:  gpburdell@hotmail.com
+//  Student name:   Natalia Sanchez Castillo
+//  Student email:  nataliasanchezc0@gmail.com
 // 
 //     I certify that this work is my work only, any work copied from Stack Overflow, textbooks, 
 //     or elsewhere is properly cited. 
 //
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//  BUG
-//  list any and all bugs in your code 
-//  1. I didn't get abc to work because of xyz, I tried ijk...
-//
-
-
-//  sfml.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 
 #include "GameEngine.h"

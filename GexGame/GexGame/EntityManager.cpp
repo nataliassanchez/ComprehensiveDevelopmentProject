@@ -43,16 +43,17 @@ void EntityManager::removeDeadEntities(EntityVec &v) {
 
 void EntityManager::update() {
 
-    // delete all dead entities
+    // Remove dead entities 
     removeDeadEntities(m_entities);
-    for (auto& [_, v] : m_entityMap) {
-        removeDeadEntities(v);
-    }
+    for (auto& [_, entityVec] : m_entityMap)
+        removeDeadEntities(entityVec);
 
-    for (auto e : m_entitiesToAdd) {
+
+    // add new entities
+    for (auto e : m_entitiesToAdd)
+    {
         m_entities.push_back(e);
         m_entityMap[e->getTag()].push_back(e);
     }
-
     m_entitiesToAdd.clear();
 }

@@ -194,16 +194,10 @@ void Assets::loadAnimations(const std::string &path) {
         if (token == "Animation")
         {
             std::string name, texture, repeat;
-            float speed;
-            confFile >> name >> texture >> speed >> repeat;
+            size_t frames, speed;
+            confFile >> name >> texture >> frames >>speed;
 
-            Animation a(name,
-                        getTexture(texture),
-                        m_frameSets[name],
-                        sf::seconds(1/ speed ),
-                        (repeat == "yes") );
-
-            m_animationMap[name] = a;
+            addAnimation(name, texture, frames, speed);
         }
         else
         {
@@ -219,6 +213,11 @@ void Assets::loadAnimations(const std::string &path) {
 
 const Animation& Assets::getAnimation(const std::string &name) const {
     return m_animationMap.at(name);
+}
+
+void Assets::addAnimation(const std::string& animationName, const std::string& textureName, size_t frameCount, size_t speed)
+{
+    m_animationMap[animationName] = Animation(animationName, getTexture(textureName), frameCount, speed);
 }
 
 

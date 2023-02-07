@@ -10,155 +10,99 @@
 #include "Animation.h"
 #include <array>
 
-struct Component {
-    bool has{false};
-    Component() = default;
-};
-
-
-struct CAutoPilot : public Component
+struct Component
 {
-    std::array<float, 5> bearings {45, 0, -45, 0, 45};
-    std::array<sf::Time, 5> lengths {
-            sf::seconds(0.5),
-            sf::seconds(1),
-            sf::seconds(1),
-            sf::seconds(1),
-            sf::seconds(0.5)
-    };
-
-    size_t legs{5};
-    size_t currentLeg{0};
-    sf::Time countdown{sf::Time::Zero};
-
-    CAutoPilot() = default;
+	bool has{ false };
+	Component() = default;
 };
 
 
-struct CMissiles : public Component {
-    size_t    missileCount{5};
+struct CAnimation : public Component
+{
+	Animation animation;
+	bool repeat{ false };
+	CAnimation() = default;
 
-    CMissiles() = default;
+	CAnimation(const Animation& animation, bool r)
+		:animation(animation), repeat(r) {}
 };
 
-struct CGun : public Component {
-    bool isFiring{false};
-    sf::Time countdown{sf::Time::Zero};
-    int fireRate{1};
-    int spreadLevel{1};
+struct CInput : public Component
+{
+	bool up{ false };
+	bool left{ false };
+	bool right{ false };
+	bool down{ false };
 
-    CGun() = default;
-};
-
-
-struct CSprite : public Component {
-    sf::Sprite sprite;
-
-    CSprite() = default;
-
-
-    CSprite(const sf::Texture &t)
-            : sprite(t) {
-        centerOrigin(sprite);
-    }
-
-
-    CSprite(const sf::Texture &t, sf::IntRect r)
-            : sprite(t, r) {
-        centerOrigin(sprite);
-    }
+	CInput() = default;
 };
 
 
-struct CAnimation : public Component {
-    Animation   animation;
+struct CLifespan : public Component
+{
+	int total{ 0 };
+	int remaining{ 0 };
 
-    CAnimation() = default;
-    CAnimation(const Animation& a) : animation(a) {}
+	CLifespan() = default;
+	CLifespan(int t) : total(t), remaining{ t } {}
 
 };
 
 
-struct CHealth : public Component {
-    int         hp{1};
+struct CBoundingBox : public Component
+{
+	sf::Vector2f size{ 0.f, 0.f };
+	sf::Vector2f halfSize{ 0.f, 0.f };
 
-    CHealth() = default;
-    CHealth(int hp) : hp(hp) {}
-};
-
-struct CState : public Component {
-    std::string state{"none"};
-
-    CState() = default;
-    CState(const std::string& s) : state(s){}
-
-};
-
-struct CTransform : public Component {
-    sf::Vector2f pos{0.f, 0.f};
-    sf::Vector2f vel{0.f, 0.f};
-    sf::Vector2f scale{1.f, 1.f};
-    float rot{0.f};
-    float rotVel{0.f};
-
-    CTransform() = default;
-
-
-    CTransform(sf::Vector2f p, sf::Vector2f v, float r = 0.f, float rs = 0.f)
-            : pos(p), vel(v), rot(r), rotVel(rs) {}
-
+	CBoundingBox() = default;
+	CBoundingBox(const sf::Vector2f& s) : size(s), halfSize(0.5f * s)
+	{}
 };
 
 
-struct CShape : public Component {
-    sf::CircleShape shape;
+struct CTransform : public Component
+{
 
-    CShape() = default;
+	sf::Vector2f	pos{ 0.f, 0.f };
+	sf::Vector2f	prevPos{ 0.f, 0.f };
+	sf::Vector2f	scale{ 1.f, 1.f };
+	sf::Vector2f	vel{ 0.f, 0.f };
 
+	float   angVel{ 0 };
+	float	angle{ 0.f };
 
-    CShape(float radius, sf::Color color = sf::Color::Red, size_t points = 30) {
-        shape.setRadius(radius);
-        shape.setFillColor(color);
-        shape.setPointCount(points);
-        centerOrigin(shape);
-    }
+	CTransform() = default;
+	CTransform(const sf::Vector2f& p) : pos(p) {}
+	CTransform(const sf::Vector2f& p, const sf::Vector2f& v, const sf::Vector2f& sc, float a)
+		: pos(p), prevPos(p), vel(v), scale(sc), angle(a) {}
+
 };
 
 
-struct CCollision : public Component {
-    float radius{0.f};
+struct CScore : public Component
+{
+	int score{ 0 };
 
-    CCollision() = default;
-
-
-    CCollision(float r) : radius(r) {}
+	CScore() = default;
+	CScore(int s = 0) : score(s) {}
 };
 
-struct CBoundingBox : public Component {
-    sf::Vector2f size;
-    sf::Vector2f halfSize;
 
-    CBoundingBox() = default;
+struct CState : public Component
+{
+	enum State {
+		isGoingUp = 1,
+		isFacingLeft = 1 << 1,
+		isRunning = 1 << 2,
+		isGoingDown = 1 << 3
+	};
+	unsigned int  state{ 0 };
 
+	CState() = default;
+	CState(unsigned int s) : state(s) {}
+	bool test(unsigned int x) { return (state & x); }
+	void set(unsigned int x) { state |= x; }
+	void unSet(unsigned int x) { state &= ~x; }
 
-    CBoundingBox(const sf::Vector2f &s)
-            : size(s), halfSize(s / 2.f) {}
-
-
-    sf::FloatRect getRect(sf::Vector2f pos) {
-        return sf::FloatRect(pos + halfSize, size);
-    }
 };
-
-struct CInput : public Component {
-    bool up{false};
-    bool left{false};
-    bool right{false};
-    bool down{false};
-
-    bool shoot{false};
-
-    CInput() = default;
-};
-
 #endif //SFMLCLASS_COMPONENTS_H

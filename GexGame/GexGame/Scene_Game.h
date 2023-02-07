@@ -9,39 +9,52 @@
 
 class Scene_Game : public Scene {
 
-private:
-    std::shared_ptr<Entity>		m_player;
-    std::string					m_levelPath;
+    struct PlayerConfig
+    {
+        float X{ 0.f }, Y{ 0.f };
+        float SPEED{ 0.f }, MAXSPEED{ 0.f };
+        std::string WEAPON;
+    };
+protected:
 
-    bool						m_drawTextures{true};
-    bool						m_drawAABB{false};
-    bool				        m_drawGrid{false};
+	std::shared_ptr<Entity>		m_player;
+	std::string					m_levelPath;
+	PlayerConfig				m_playerConfig;
+	bool						m_drawTextures{ true };
+	bool						m_drawCollision{ false };
+	bool						m_drawGrid{ false };
+	const sf::Vector2f			m_gridSize{ 64,64 };
+	sf::Text					m_gridText;
 
-    void	                    onEnd() override;
-
-    //systems
-    void                        sMovement(sf::Time dt);
-    void                        sCollisions();
-    void                        sUpdate(sf::Time dt);
-
-
-    // helper functions
-    void                        registerActions();
-    void                        init(const std::string& configPath);
-    void                        loadFromFile(const std::string &configPath);
-    void                        spawnPlayer();
-    void                        drawAABB();
-    void                        keepEntitiesInBounds();
-    void                        adjustPlayerPosition();
-    sf::FloatRect               getViewBounds();
+	void	init(const std::string& levelPath);
+	void	registerActions();
+	void	onEnd() override;
 
 
 public:
-    Scene_Game(GameEngine* gameEngine, const std::string& levelPath);
+	Scene_Game(GameEngine* gameEngine, const std::string& levelPath);
 
-    void		                update(sf::Time dt) override;
-    void		                sDoAction(const Action& action) override;
-    void		                sRender() override;
+	void update() override;
+	void sRender() override;
+	void sDoAction(const Action& action) override;
+
+	void sMovement();
+	void sAnimation();
+	void sLifespan();
+	void sEnemySpawner();
+	void sCollision();
+
+	void sDebug();
+	void drawLine();
+
+	void playerCheckState();
+
+
+	sf::Vector2f gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity);
+	void loadLevel(const std::string& filename);
+	void loadFromFile(const std::string& filename);
+	void spawnPlayer();
+	void spawnBullet(std::shared_ptr<Entity>);
 
 };
 
