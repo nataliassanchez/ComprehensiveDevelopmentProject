@@ -6,6 +6,8 @@ Font    Arial      	../assets/fonts/arial.ttf
 Font    Mario      	../assets/fonts/mario.ttf
 Font    Megaman    	../assets/fonts/megaman.ttf
 Font	MegaSurprise 	../assets/fonts/megaSurprise.ttf
+Font 	Organic		../assets/fonts/OrganicRelief.ttf 
+Font 	Powerful	../assets/fonts/Powerful.ttf
 
 Texture Lawn        ../assets/media/Background.jpg
 Texture Logo        ../assets/media/logo.png
@@ -30,6 +32,10 @@ Texture TextFence   ../assets/media/fence.png
 Texture TextFence2   ../assets/media/fence2.png 
 Texture TextFence3   ../assets/media/fence3.png 
 Texture TextHouse    ../assets/media/house.png 
+Texture TextPurcopine1    ../assets/media/purco1.png 
+Texture TextPurcopine2    ../assets/media/purco2.png
+Texture TextPurcopine3    ../assets/media/purco3.png  
+Texture TextPurcopine4    ../assets/media/purco4.png  
 
 #JSON                ../assets/media/Entities.json
 
@@ -53,7 +59,13 @@ Animation Fence		TextFence   1 0
 Animation Fence2	TextFence2   1 0
 Animation Fence3	TextFence3   1 0
 Animation House		TextHouse    1 0
+Animation PurcoRun	TextPurcopine1    1 0
+Animation PurcoUp	TextPurcopine2    1 0
+Animation PurcoD	TextPurcopine3    1 0
+Animation PurcoB	TextPurcopine4    1 0
 #
 # SOUNDS
-
+Sound victory ../assets/Sound/victory.wav
+Sound crash ../assets/Sound/punch.wav
+Sound defeat ../assets/Sound/defeat.wav
 

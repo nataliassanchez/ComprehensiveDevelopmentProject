@@ -1,6 +1,3 @@
-//
-// Created by David Burchill on 2022-10-21.
-//
 
 #ifndef SFMLCLASS_SCENE_GAME_H
 #define SFMLCLASS_SCENE_GAME_H
@@ -13,18 +10,28 @@ class Scene_Game : public Scene {
     {
         float X{ 0.f }, Y{ 0.f };
         float SPEED{ 0.f }, MAXSPEED{ 0.f };
-        std::string WEAPON;
     };
+	struct EnemyConfig
+	{
+		std::string name;
+		float X{ 0.f }, Y{ 0.f };
+		float targetX{ 0.f }, targetY{ 0.f };
+
+	};
+
 protected:
 
-	std::shared_ptr<Entity>		m_player;
-	std::string					m_levelPath;
-	PlayerConfig				m_playerConfig;
-	bool						m_drawTextures{ true };
-	bool						m_drawCollision{ false };
-	bool						m_drawGrid{ false };
-	const sf::Vector2f			m_gridSize{ 64,64 };
-	sf::Text					m_gridText;
+	std::shared_ptr<Entity>			m_player;
+	std::string						m_levelPath;
+	PlayerConfig					m_playerConfig;
+	std::vector <EnemyConfig>		m_enemyConfigVec;
+	bool							m_drawTextures{ true };
+	bool							m_drawCollision{ false };
+	bool							m_drawGrid{ false };
+	const sf::Vector2f				m_gridSize{ 64,64 };
+	sf::Text						m_gridText;
+	bool							m_wonGame{false};
+	mutable bool					playOnce{ true };
 
 	void	init(const std::string& levelPath);
 	void	registerActions();
@@ -43,7 +50,11 @@ public:
 	void sLifespan();
 	void sEnemySpawner();
 	void sCollision();
-
+	void PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies);
+	void GrassCollision(EntityVec& players);
+	void PlayerEnemyCol(EntityVec& players, EntityVec& enemies);
+	void checkEnemyTileCol(EntityVec& enemies, NttPtr& t);
+	void EnemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e);
 	void sDebug();
 	void drawLine();
 
@@ -54,6 +65,10 @@ public:
 	void loadLevel(const std::string& filename);
 	void loadFromFile(const std::string& filename);
 	void spawnPlayer();
+	void spawnEnemies();
+	void moveEnemies();
+	void addPlayerPoints(int tiles);
+	bool checkIfWon();
 	void spawnBullet(std::shared_ptr<Entity>);
 
 };

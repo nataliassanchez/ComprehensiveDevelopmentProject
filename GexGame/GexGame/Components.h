@@ -9,6 +9,7 @@
 #include "Utilities.h"
 #include "Animation.h"
 #include <array>
+#include <set>
 
 struct Component
 {
@@ -59,6 +60,13 @@ struct CBoundingBox : public Component
 	{}
 };
 
+struct CDirection : public Component {
+	std::set<std::string> prevCollisions{};
+
+	CDirection() = default;
+	CDirection(std::set<std::string> d) : prevCollisions(d) {}
+};
+
 
 struct CTransform : public Component
 {
@@ -84,7 +92,7 @@ struct CScore : public Component
 	int score{ 0 };
 
 	CScore() = default;
-	CScore(int s = 0) : score(s) {}
+	CScore(int p) : score(p) {}
 };
 
 

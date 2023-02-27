@@ -31,6 +31,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene_Game.cpp" />
     <ClCompile Include="Scene_GexFighter.cpp" />
+    <ClCompile Include="Scene_Levels.cpp" />
     <ClCompile Include="Scene_Menu.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="Utilities.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene_Game.h" />
     <ClInclude Include="Scene_GexFighter.h" />
+    <ClInclude Include="Scene_Levels.h" />
     <ClInclude Include="Scene_Menu.h" />
     <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="Utilities.h" />

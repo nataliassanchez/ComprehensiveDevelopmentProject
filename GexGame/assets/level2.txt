@@ -1,0 +1,612 @@
+#X->2
+
+TileGrass Grass1 2 12
+TileGrass Grass2 2 11
+TileGrass Grass3 2 10
+TileGrass Grass2 2 9
+TileGrass Grass3 2 8
+TileGrass Grass1 2 7
+TileGrass Grass2 2 6
+TileGrass Grass3 2 5
+TileGrass Grass2 2 4
+TileGrass Grass3 2 3
+TileGrass Grass1 2 2
+TileGrass Grass1 2 1
+Tile Grass2 2 0
+Tile Grass3 2 -1
+Tile Grass2 2 -2
+Tile Grass2 3 -2
+
+
+#X->3
+TileGrass Grass1 3 12
+TileGrass Grass2 3 11
+TileGrass Grass3 3 10
+TileGrass Grass2 3 9
+TileGrass Grass3 3 8
+TileGrass Grass1 3 7
+TileGrass Grass2 3 6
+TileGrass Grass3 3 5
+TileGrass Grass2 3 4
+TileGrass Grass3 3 3
+TileGrass Grass1 3 2
+TileGrass Grass1 3 1
+Tile Grass2 3 0
+Tile Grass3 3  -1
+Tile Rock   3  -2
+
+
+#X->4
+Tile Tile1  4	12
+Tile Tile1  4	11
+Tile Tile1  4	10
+Tile Tile2  4	9
+Tile Tile1  4	8
+Tile Tile1  4	7
+Tile Tile1  4	6
+Tile Tile1  4	5
+Tile Tile2  4	4
+Tile Tile1  4	3
+TileGrass Grass1 4 2
+TileGrass Grass1 4 1
+Tile Grass2 4 0
+Tile Grass2 4 -1
+Tile Grass2 4 -2
+Tile Grass2 5 -2
+
+
+
+#X->5
+TileGrass Grass3 5 12
+TileGrass Grass1 6 12
+TileGrass Grass1 7 12
+TileGrass Grass2 8 12
+TileGrass Grass1 9 12
+TileGrass Grass3 10 12
+TileGrass Grass2 11 12
+TileGrass Grass1 12 12
+TileGrass Grass3 13 12
+TileGrass Grass2 14 12
+
+TileGrass Grass2 14 11
+TileGrass Grass2 14 10
+TileGrass Grass2 14 9
+TileGrass Grass2 14 8
+TileGrass Grass2 14 7
+TileGrass Grass2 14 6
+TileGrass Grass2 14 5
+TileGrass Grass2 14 4
+TileGrass Grass2 14 3
+TileGrass Grass2 14 2
+
+TileGrass Grass1 13 3
+TileGrass Grass2 12 3
+TileGrass Grass3 11 3
+TileGrass Grass1 10 3
+TileGrass Grass2 9 3
+TileGrass Grass3 8 3
+TileGrass Grass1 7 3
+TileGrass Grass2 6 3
+
+TileGrass Grass1 13 2
+TileGrass Grass2 12 2
+TileGrass Grass3 11 2
+
+
+TileGrass Grass1 11 1
+TileGrass Grass2 11 0
+TileGrass Grass3 11 -1
+TileGrass Grass3 11 -2
+
+
+TileGrass Grass3 10 -2
+TileGrass Grass3 9 -2
+TileGrass Grass3 8 -2
+TileGrass Grass3 7 -2
+TileGrass Grass3 6 -2
+
+TileGrass Grass3 6 -1
+TileGrass Grass3 6 0
+TileGrass Grass3 6 1
+Tile Grass3 6 2
+Tile Rock 6 2
+
+Tile Grass1 10 2
+Tile Grass2 9 2
+Tile Grass3 8 2
+Tile Grass1 7 2
+
+Tile Grass1 10 1
+Tile Grass2 9 1
+Tile Grass3 8 1
+Tile Grass1 7 1
+
+Tile Grass1 10 0
+Tile Grass2 9 0
+Tile Grass3 8 0
+Tile Grass1 7 0
+
+Tile Grass1 10 -1
+Tile Grass2 9 -1
+Tile Grass3 8 -1
+Tile Grass1 7 -1
+
+Tile Bush1 7 -1
+Tile Bush1 7 1
+Tile Bush1 9 -1
+Tile Bush1 9 1
+
+Tile Grass1 12 -2
+Tile Rock 12 -2
+Tile Tile1 12 -1
+Tile Grass1 12 0
+Tile Grass1 12 0
+Tile Rock 12 0
+Tile Tile1 12 1
+Tile Grass1 13 1
+Tile Rock 13 1
+Tile Tile2 14 1
+Tile Grass1 15 1
+Tile Rock 15 1
+Tile Tile2 16 1
+
+TileGrass Grass1 13 -2
+TileGrass Grass1 13 -1
+TileGrass Grass1 13 0
+
+TileGrass Grass1 14 0
+TileGrass Grass2 14 -1
+TileGrass Grass3 14 -2
+
+Tile Tile1  15	12
+Tile Tile1  15	11
+Tile Tile2  15	10
+Tile Tile1  15	9
+Tile Tile1  15	8
+Tile Tile1  15	7
+Tile Tile1  15	6
+Tile Tile1  15	5
+Tile Tile2  15	4
+TileGrass Grass3 15 2
+TileGrass Grass3 15 3
+TileGrass Grass1 15 0
+TileGrass Grass3 15 -1
+TileGrass Grass2 15 -2
+
+
+Tile Tile1  16	12
+Tile Tile1  16	11
+Tile Tile2  16	10
+Tile Tile1  16	9
+Tile Tile1  16	8
+Tile Tile1  16	7
+Tile Tile1  16	6
+Tile Tile1  16	5
+Tile Tile2  16	4
+TileGrass Grass3 16 2
+TileGrass Grass3 16 3
+TileGrass Grass1 16 0
+TileGrass Grass2 16 -1
+TileGrass Grass3 16 -2
+
+Tile Tile1  17	12
+Tile Tile1  17	11
+Tile Tile2  17	10
+Tile Tile1  17	9
+Tile Tile1  17	8
+Tile Tile1  17	7
+Tile Tile1  17	6
+Tile Tile1  17	5
+Tile Tile2  17	4
+TileGrass Grass3 17 3
+TileGrass Grass3 17 2
+TileGrass Grass3 17 1
+TileGrass Grass1 17 0
+TileGrass Grass2 17 -1
+TileGrass Grass3 17 -2
+
+
+Tile Tile1  18	12
+Tile Tile1  18	11
+Tile Tile2  18	10
+Tile Tile1  18	9
+Tile Tile1  18	8
+Tile Tile1  18	7
+Tile Tile1  18	6
+Tile Tile1  18	5
+Tile Tile2  18	4
+TileGrass Grass3 18 2
+TileGrass Grass3 18 3
+TileGrass Grass3 18 1
+TileGrass Grass1 18 0
+TileGrass Grass2 18 -1
+TileGrass Grass3 18 -2
+
+
+Tile Tile1  19	12
+Tile Tile1  19	11
+Tile Tile2  19	10
+Tile Tile1  19	9
+Tile Tile1  19	8
+Tile Tile1  19	7
+Tile Tile1  19	6
+Tile Tile1  19	5
+Tile Tile2  19	4
+TileGrass Grass3 19 2
+TileGrass Grass3 19 3
+TileGrass Grass3 19 1
+Tile Grass2 19 0
+Tile Grass1 19 -1
+TileGrass Grass3 19 -2
+
+Tile Tile1  20	12
+Tile Tile1  20	11
+Tile Tile2  20	10
+Tile Tile1  20	9
+Tile Tile1  20	8
+Tile Tile1  20	7
+Tile Tile1  20	6
+Tile Tile1  20	5
+Tile Tile2  20	4
+TileGrass Grass3 20 2
+TileGrass Grass3 20 3
+TileGrass Grass3 20 1
+Tile Grass2 20 0
+Tile Grass3 20 -1
+TileGrass Grass1 20 -2
+
+Tile Tile1  21	12
+Tile Tile1  21	11
+Tile Tile2  21	10
+Tile Tile1  21	9
+Tile Tile1  21	8
+Tile Tile1  21	7
+Tile Tile1  21	6
+Tile Tile1  21	5
+Tile Tile2  21	4
+TileGrass Grass3 21 2
+TileGrass Grass3 21 3
+TileGrass Grass3 21 1
+Tile Grass2 21 0
+Tile Grass3 21 -1
+TileGrass Grass1 21 -2
+
+Tile Tile1  22	12
+Tile Tile1  22	11
+Tile Tile2  22	10
+Tile Tile1  22	9
+Tile Tile1  22	8
+Tile Tile1  22	7
+Tile Tile1  22	6
+Tile Tile1  22	5
+Tile Tile2  22	4
+TileGrass Grass3 22 2
+TileGrass Grass3 22 3
+TileGrass Grass3 22 1
+Tile Grass2 22 0
+Tile Grass3 22 -1
+TileGrass Grass1 22 -2
+
+TileGrass Grass1 23 12
+TileGrass Grass2 23 11
+TileGrass Grass1 23 10
+TileGrass Grass3 23 9
+TileGrass Grass1 23 8
+TileGrass Grass2 23 7
+TileGrass Grass1 23 6
+TileGrass Grass3 23 5
+TileGrass Grass1 23 4
+TileGrass Grass2 23 3
+TileGrass Grass1 23 2
+TileGrass Grass3 23 1
+TileGrass Grass3 23 0
+TileGrass Grass1 23 0
+TileGrass Grass2 23 -1
+TileGrass Grass3 23 -2
+
+TileGrass Grass1 24 12
+TileGrass Grass2 24 11
+TileGrass Grass1 24 10
+TileGrass Grass1 24 9
+TileGrass Grass3 24 8
+TileGrass Grass1 24 7
+TileGrass Grass3 24 6
+TileGrass Grass2 24 5
+TileGrass Grass1 24 4
+TileGrass Grass2 24 3
+TileGrass Grass1 24 2
+TileGrass Grass3 24 1
+TileGrass Grass3 24 0
+TileGrass Grass1 24 0
+TileGrass Grass2 24 -1
+TileGrass Grass3 24 -2
+
+Tile Tile1 25 10
+Tile Tile1 25 9
+Tile Tile1 25 8
+Tile Tile1 25 7
+Tile Tile1 25 6
+Tile Tile1 25 5
+Tile Tile1 25 4
+Tile Tile1 25 3
+Tile Tile1 25 2
+TileGrass Grass1 25 0
+TileGrass Grass2 25 -1
+TileGrass Grass3 25 -2
+
+Tile Tile1 26 10
+Tile Tile1 26 9
+Tile Tile1 26 8
+Tile Tile1 26 7
+Tile Tile1 26 6
+Tile Tile1 26 5
+Tile Tile1 26 4
+Tile Tile1 26 3
+Tile Tile1 26 2
+
+TileGrass Grass1 25 12
+TileGrass Grass2 25 11
+TileGrass Grass1 25 1
+TileGrass Grass1 25 0
+
+TileGrass Grass1 26 12
+TileGrass Grass2 26 11
+TileGrass Grass1 26 1
+TileGrass Grass1 26 0
+TileGrass Grass1 26 0
+TileGrass Grass2 26 -1
+TileGrass Grass3 26 -2
+
+TileGrass Grass1 27 12
+TileGrass Grass2 27 11
+TileGrass Grass1 27 10
+TileGrass Grass1 27 9
+TileGrass Grass3 27 8
+TileGrass Grass1 27 7
+TileGrass Grass3 27 6
+TileGrass Grass2 27 5
+TileGrass Grass1 27 4
+TileGrass Grass2 27 3
+TileGrass Grass1 27 2
+TileGrass Grass3 27 1
+TileGrass Grass3 27 0
+TileGrass Grass1 27 0
+TileGrass Grass2 27 -1
+TileGrass Grass3 27 -2
+
+TileGrass Grass1 28 12
+TileGrass Grass2 28 11
+TileGrass Grass1 28 10
+TileGrass Grass1 28 9
+TileGrass Grass3 28 8
+TileGrass Grass1 28 7
+TileGrass Grass3 28 6
+TileGrass Grass2 28 5
+TileGrass Grass1 28 4
+TileGrass Grass2 28 3
+TileGrass Grass1 28 2
+TileGrass Grass3 28 1
+TileGrass Grass3 28 0
+TileGrass Grass1 28 0
+TileGrass Grass2 28 -1
+TileGrass Grass3 28 -2
+
+
+
+#Pool
+
+Tile Tile1  5	11
+Tile Tile1  6	11
+Tile Tile1  7	11
+Tile Tile1  8	11
+Tile Tile1  9	11
+Tile Tile1  10	11
+Tile Tile1  11	11
+Tile Tile1  12	11
+
+
+Tile Tile1  13	11
+Tile Tile1  13	10
+Tile Tile2  13	9
+Tile Tile1  13	8
+Tile Tile1  13	7
+Tile Tile1  13	6
+Tile Tile1  13	5
+Tile Tile2  13	4
+
+
+Tile Tile1  5	4
+Tile Tile1  6	4
+Tile Tile1  7	4
+Tile Tile1  8	4
+Tile Tile1  9	4
+Tile Tile1  10	4
+Tile Tile1  11	4
+Tile Tile1  12	4
+Tile Tile2  13	4
+
+Tile Water  5	10
+Tile Water  5	9
+Tile Water  5	8
+Tile Water  5	7
+Tile Water  5	6
+Tile Water  5	5
+
+Tile Water  5	10
+Tile Water  5	9
+Tile Water  5	8
+Tile Water  5	7
+Tile Water  5	6
+Tile Water  5	5
+
+Tile Water  6	10
+Tile Water  6	9
+Tile Water  6	8
+Tile Water  6	7
+Tile Water  6	6
+Tile Water  6	5
+
+Tile Water  7	10
+Tile Water  7	9
+Tile Water  7	8
+Tile Water  7	7
+Tile Water  7	6
+Tile Water  7	5
+
+Tile Water  8	10
+Tile Water  8	9
+Tile Water  8	8
+Tile Water  8	7
+Tile Water  8	6
+Tile Water  8	5
+
+Tile Water  9	10
+Tile Water  9	9
+Tile Water  9	8
+Tile Water  9	7
+Tile Water  9	6
+Tile Water  9	5
+
+Tile Water  10	10
+Tile Water  10 9
+Tile Water  10 8
+Tile Water  10 7
+Tile Water  10 6
+Tile Water  10 5
+
+Tile Water  11	10
+Tile Water  11 9
+Tile Water  11 8
+Tile Water  11 7
+Tile Water  11 6
+Tile Water  11 5
+
+Tile Water  12	10
+Tile Water  12 9
+Tile Water  12 8
+Tile Water  12 7
+Tile Water  12 6
+Tile Water  12 5
+
+
+TileGrass Grass1 5 3
+TileGrass Grass2 5 2
+TileGrass Grass3 5  1
+Tile Grass2 5 0
+Tile Grass3 5  -1
+Tile Rock   5 0
+Tile Rock   4 0
+Tile Bush1  4 -2
+
+Tile Fence 2 -3
+Tile Fence 3 -3
+Tile Fence 4 -3
+Tile Fence 5 -3
+Tile Fence 6 -3
+Tile Fence 7 -3
+Tile Fence 8 -3
+Tile Fence 9 -3
+Tile Fence 10 -3
+Tile Fence 11 -3
+Tile Fence 12 -3
+Tile Fence 13 -3
+Tile Fence 14 -3
+Tile Fence 15 -3
+Tile Fence 16 -3
+Tile Fence 17 -3
+Tile Fence 18 -3
+Tile Fence 19 -3
+Tile Fence 20 -3
+Tile Fence 21 -3
+Tile Fence 22 -3
+Tile Fence 23 -3
+Tile Fence 24 -3
+Tile Fence 25 -3
+Tile Fence 26 -3
+Tile Fence 27 -3
+Tile Fence 28 -3
+
+Tile Fence 2 13
+Tile Fence 3 13
+Tile Fence 4 13
+Tile Fence 5 13
+Tile Fence 6 13
+Tile Fence 7 13
+Tile Fence 8 13
+Tile Fence 9 13
+Tile Fence 10 13
+Tile Fence 11 13
+Tile Fence 12 13
+Tile Fence 13 13
+Tile Fence 14 13
+Tile Fence 15 13
+Tile Fence 16 13
+Tile Fence 17 13
+Tile Fence 18 13
+Tile Fence 19 13
+Tile Fence 20 13
+Tile Fence 21 13
+Tile Fence 22 13
+Tile Fence 23 13
+Tile Fence 24 13
+Tile Fence 25 13
+Tile Fence 26 13
+Tile Fence 27 13
+Tile Fence 28 13
+
+
+Tile Fence2 1 13
+Tile Fence2 1 12
+Tile Fence2 1 11
+Tile Fence2 1 10
+Tile Fence2 1 9
+Tile Fence2 1 8
+Tile Fence2 1 7
+Tile Fence2 1 6
+Tile Fence2 1 5
+Tile Fence2 1 4
+Tile Fence2 1 3
+Tile Fence2 1 2
+Tile Fence2 1 1
+Tile Fence2 1 0
+Tile Fence2 1 -1
+Tile Fence2 1 -2
+Tile Fence2 1 -3
+
+Tile Fence3 29 13
+Tile Fence3 29 12
+Tile Fence3 29 11
+Tile Fence3 29 10
+Tile Fence3 29 9
+Tile Fence3 29 8
+Tile Fence3 29 7
+Tile Fence3 29 6
+Tile Fence3 29 5
+Tile Fence3 29 4
+Tile Fence3 29 3
+Tile Fence3 29 2
+Tile Fence3 29 1
+Tile Fence3 29 0
+Tile Fence3 29 -1
+Tile Fence3 29 -2
+Tile Fence3 29 -3
+
+
+
+
+Tile Bush2  2	-1
+Tile Rock   2  -2
+
+Dec Bush1 16 11
+Dec Bush1 18 11
+Dec Bush1 20 11
+Dec Bush1 21 -1
+Dec Bush1 19 -1
+
+
+
+
+Dec House 16 5
+
+#     gX, gY, sX, sM,  
+Player 5   12   5  20 

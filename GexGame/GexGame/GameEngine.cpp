@@ -16,6 +16,7 @@
 #include "Scene_Menu.h"
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
+#include "Scene_Levels.h"
 
 
 const sf::Time GameEngine::TIME_PER_FRAME = sf::seconds((1.f / 60.f));
@@ -45,6 +46,7 @@ void GameEngine::createMenu() {
     // add items to menu_scene
     menuScene->registerItem(SceneID::LEVELS, "Start");
     menuScene->registerItem(SceneID::NONE, "Options");
+    
 
 }
 
@@ -55,10 +57,28 @@ void GameEngine::createFactories() {
                 return std::make_shared<Scene_Menu>(this);
             });
 
-    m_factories[SceneID::LEVELS] = std::function<Sptr()> (
-            [this]() -> Sptr {
-                return std::make_shared<Scene_Game>(this, "../assets/level1.txt");
-            });
+    m_factories[SceneID::LEVELS] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Levels>(this);
+        });
+
+    m_factories[SceneID::LEVEL1] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Game>(this, "../assets/level1.txt");
+        });
+    m_factories[SceneID::LEVEL2] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Game>(this, "../assets/level2.txt");
+        });
+    m_factories[SceneID::LEVEL3] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Game>(this, "../assets/level3.txt");
+        });
+    m_factories[SceneID::LEVEL4] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Game>(this, "../assets/level4.txt");
+        });
+
 
     m_factories[SceneID::FTR] = std::function<Sptr()> (
             [this]() -> Sptr {
@@ -119,6 +139,7 @@ void GameEngine::run() {
             currentScene()->update();				// update world
             timeSinceLastUpdate -= SPF;
         }
+
 
         currentScene()->sRender();					// render world
     

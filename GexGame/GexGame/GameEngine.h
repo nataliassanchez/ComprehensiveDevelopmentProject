@@ -16,7 +16,7 @@
 
 
 class Scene;
-enum class SceneID { NONE, MENU, LEVELS, FTR };
+enum class SceneID { NONE, MENU, LEVELS, LEVEL1,LEVEL2, LEVEL3, LEVEL4, FTR };
 
 using Sptr = std::shared_ptr<Scene>;
 using SceneMap = std::map<SceneID, Sptr>;

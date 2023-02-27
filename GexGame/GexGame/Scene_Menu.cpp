@@ -62,7 +62,7 @@ void Scene_Menu::sRender() {
     static const sf::Color normalColor(255, 255, 255);
     static const sf::Color backgroundColor(34,139,34);
 
-    sf::Text footer("UP: W    DOWN: S   PLAY:D    QUIT: ESC",
+    sf::Text footer("UP: W    DOWN: S   PLAY: ENTER    QUIT: ESC",
                     m_game->assets().getFont("MegaSurprise"),
                     20);
     footer.setFillColor(normalColor);
@@ -71,13 +71,18 @@ void Scene_Menu::sRender() {
 
     m_game->window().clear(backgroundColor);
     m_game->window().draw(m_background);
+
     m_menuText.setFillColor(normalColor);
     m_menuText.setString(m_title);
     centerOrigin(m_menuText);
+
     m_menuText.setPosition(view.getCenter().x, view.getSize().y / 4);
+
     m_game->window().draw(m_menuText);
+    
     centerOrigin(m_logo);
     m_logo.setPosition(view.getCenter());
+    
     m_game->window().draw(m_logo);
     
 
