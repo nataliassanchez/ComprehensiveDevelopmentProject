@@ -22,10 +22,11 @@ struct CAnimation : public Component
 {
 	Animation animation;
 	bool repeat{ false };
+	bool isShort{ false };
 	CAnimation() = default;
 
-	CAnimation(const Animation& animation, bool r)
-		:animation(animation), repeat(r) {}
+	CAnimation(const Animation& animation, bool r, bool s)
+		:animation(animation), repeat(r), isShort(s) {}
 };
 
 struct CInput : public Component

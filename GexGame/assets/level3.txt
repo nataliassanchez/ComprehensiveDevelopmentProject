@@ -571,5 +571,5 @@ Dec House 1 19
 #     gX, gY, sX, sM,  
 Player 11  1    5  20 
 
-Enemy purcopine 17 23 19 1
-Enemy purcopine 2 2 19 1
+Enemy purcopine 12 15 
+Enemy purcopine 2 2 

@@ -1,3 +1,6 @@
+
+Window 1728 704
+
 Tile	  Fence2 2 4
 Tile	  Fence2 2 5
 Tile	  Fence2 2 6

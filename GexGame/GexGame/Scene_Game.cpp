@@ -24,7 +24,6 @@ Scene_Game::Scene_Game(GameEngine *gameEngine, const std::string &levelPath)
     init(m_levelPath);
 }
 
-
 void Scene_Game::init(const std::string& levelPath)
 {
 	registerActions();
@@ -36,8 +35,8 @@ void Scene_Game::init(const std::string& levelPath)
 	loadLevel(levelPath);
 
 	MusicPlayer::getInstance().stop();
-	//MusicPlayer::getInstance().play("menuTheme");
-	//MusicPlayer::getInstance().setVolume(15);
+	MusicPlayer::getInstance().play("menuTheme");
+	MusicPlayer::getInstance().setVolume(15);
 
 }
 
@@ -63,7 +62,6 @@ void Scene_Game::registerActions()
 	registerAction(sf::Keyboard::Down, "DOWN");
 }
 
-
 void Scene_Game::update()
 {
 	if (m_isPaused)
@@ -87,7 +85,6 @@ void Scene_Game::update()
 	SoundPlayer::getInstance().removeStoppedSounds();
 	
 }
-
 
 void Scene_Game::sMovement()
 {
@@ -149,7 +146,7 @@ void Scene_Game::playerCheckState()
 			if (!state.test(CState::isRunning)) // wasn't running
 			{
 				// change to running animation
-				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Run"), true);
+				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Run"), true, false);
 				state.set(CState::isRunning);
 			}
 			
@@ -157,17 +154,17 @@ void Scene_Game::playerCheckState()
 		else if (std::abs(tx.vel.y) > 0.f) {
 
 			if (state.test(CState::isGoingUp)) {
-				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Back"), true);
+				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Back"), true, false);
 				state.set(CState::isGoingUp);
 			}
 			else {
-				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Front"), true);
+				m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Front"), true, false);
 				state.set(CState::isGoingDown);
 			}
 		}
 		else
 		{
-			m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Stand"), true);
+			m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Stand"), true, false);
 			state.unSet(CState::isRunning);
 		}
 	
@@ -190,6 +187,7 @@ void Scene_Game::sCollision()
 	auto players = m_entityManager.getEntities("player");
 	auto tiles = m_entityManager.getEntities("tile");
 	auto enemies = m_entityManager.getEntities("enemy");
+	auto grassTiles = m_entityManager.getEntities("tileGrass");
 
 	//Check player and tiles collisions
 	PlayerTilesCollisions(players, tiles, enemies);
@@ -197,8 +195,48 @@ void Scene_Game::sCollision()
 	//Check enemies and player collisions
 	PlayerEnemyCol(players, enemies);
 
-	//Check lawn mowner and player collision
+	//Check lawn mowner and grass collision
 	GrassCollision(players);
+	
+	
+	dogObstables(grassTiles, enemies);
+	
+	
+}
+
+void Scene_Game::dogObstables(EntityVec& gt, EntityVec& enemies)
+{
+	std::uniform_int_distribution rand(0, 1000);
+	auto number = rand(rng);
+
+	if (number == 3)
+		drawOnce = true;
+	
+	for (auto e : enemies)
+	{
+		if ((e->getComponent<CAnimation>().animation.getName() == "DogR" ||
+			e->getComponent<CAnimation>().animation.getName() == "DogF" ||
+			e->getComponent<CAnimation>().animation.getName() == "DogB" ||
+			e->getComponent<CAnimation>().animation.getName() == "DogRB"))
+		{
+			for (auto t : gt)
+			{
+				if (t->getComponent<CAnimation>().isShort && drawOnce)
+				{
+					auto overlap = Physics::getOverlap(e, t);
+
+					if (overlap.x > 0 && overlap.y > 0)  // +ve overlap in both x and y means collision
+					{
+						auto posx = floor(e->getComponent<CTransform>().pos.x / 64);
+						auto posy = floor((2048 - e->getComponent<CTransform>().pos.y) / 64);
+						spawnPoop(sf::Vector2f(posx, posy));
+						drawOnce = false;
+					}
+					
+				}
+			}
+		}
+	}
 }
 
 void Scene_Game::PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies)
@@ -246,6 +284,7 @@ void Scene_Game::PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, Ent
 void Scene_Game::GrassCollision(EntityVec& players)
 {
 	auto tilesGrass = m_entityManager.getEntities("tileGrass");
+	auto enemies = m_entityManager.getEntities("enemy");
 	for (auto p : players) {
 		for (auto t : tilesGrass)
 		{
@@ -253,7 +292,7 @@ void Scene_Game::GrassCollision(EntityVec& players)
 			int tilesInARow = 0;
 
 
-			if (overlap.x > 0 && overlap.y > 0)  // +ve overlap in both x and y means collision
+			if (overlap.x > 0 && overlap.y > 0) 
 			{
 				auto prevOverlap = Physics::getPreviousOverlap(p, t);
 				auto& ptx = p->getComponent<CTransform>();
@@ -265,19 +304,21 @@ void Scene_Game::GrassCollision(EntityVec& players)
 				{
 					if (ptx.prevPos.y < ttx.prevPos.y)
 					{   // player standing on something isGrounded
-						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true);
+						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true, false);
 					}
 					else
 					{  // player hit something from below
-						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true);
+						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true, false);
 					}
+					t->getComponent<CAnimation>().isShort = true;
 				}
 				// collision is in the x direction
 				addPlayerPoints(tilesInARow);
-
 			}
+			
 		}
 	}
+	
 }
 
 void Scene_Game::PlayerEnemyCol(EntityVec& players, EntityVec& enemies)
@@ -285,8 +326,9 @@ void Scene_Game::PlayerEnemyCol(EntityVec& players, EntityVec& enemies)
 	for (auto p : players) {
 		for (auto e : enemies) {
 			auto overlap = Physics::getOverlap(p, e);
-			if (overlap.x > 0 && overlap.y > 0)  // +ve overlap in both x and y means collision
+			if (overlap.x > 0 && overlap.y > 0)  
 			{
+				MusicPlayer::getInstance().stop();
 				auto prevOverlap = Physics::getPreviousOverlap(p, e);
 				auto& ptx = p->getComponent<CTransform>();
 				auto ttx = e->getComponent<CTransform>();
@@ -308,11 +350,13 @@ void Scene_Game::checkEnemyTileCol(EntityVec& enemies, NttPtr& t)
 {
 	std::uniform_int_distribution rand(0, 3);
 	auto number = rand(rng);
+
 	for (auto e : enemies)
 	{
 		auto overlap = Physics::getOverlap(e, t);
 		if (overlap.x > 0 && overlap.y > 0)  // +ve overlap in both x and y means collision
 		{
+			
 			auto prevOverlap = Physics::getPreviousOverlap(e, t);
 			auto& ptx = e->getComponent<CTransform>();
 			auto ttx = t->getComponent<CTransform>();
@@ -374,48 +418,76 @@ void Scene_Game::EnemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e)
 	default:
 		break;
 	}
-	if ((e->getComponent<CAnimation>().animation.getName() == "PurcoRun" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoD" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoB")
+
+	auto eSprite = e->getComponent<CAnimation>().animation.getName();
+	if ((eSprite == "PurcoRun" ||
+		eSprite == "PurcoD" ||	
+		eSprite == "PurcoB")
 		&& ptx.y < 0) {
 		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("PurcoUp");
 	}
-	if ((e->getComponent<CAnimation>().animation.getName() == "PurcoRun" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoUp" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoB") &&
+	if ((eSprite == "PurcoRun" ||
+		eSprite == "PurcoUp" ||
+		eSprite == "PurcoB") &&
 		ptx.y > 0) {
 		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("PurcoD");
 	}
 
-	if ((e->getComponent<CAnimation>().animation.getName() == "PurcoD" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoUp" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoB")
+	if ((eSprite == "PurcoD" ||	
+		eSprite == "PurcoUp" ||	
+		eSprite == "PurcoB")
 		&& ptx.y == 0 && ptx.x < 0) {
 		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("PurcoRun");
 	}
-	if ((e->getComponent<CAnimation>().animation.getName() == "PurcoD" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoUp" ||
-		e->getComponent<CAnimation>().animation.getName() == "PurcoR")
+	if ((eSprite == "PurcoD" ||	
+		eSprite == "PurcoUp" ||
+		eSprite == "PurcoRun")
 		&& ptx.y == 0 && ptx.x > 0) {
 		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("PurcoB");
+	}
+
+	// DOG
+	if ((eSprite == "DogR" || 
+		eSprite == "DogF" || 
+		eSprite == "DogRB")
+		&& ptx.y < 0) {
+		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("DogB");
+	}
+	if ((eSprite == "DogR" || 
+		eSprite == "DogB" || 
+		eSprite == "DogRB") &&
+		ptx.y > 0) {
+		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("DogF");
+	}
+
+	if ((eSprite == "DogF" || 
+		eSprite == "DogB" || 
+		eSprite == "DogR")
+		&& ptx.y == 0 && ptx.x < 0) {
+		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("DogRB");
+	}
+	if ((eSprite == "DogF" || 
+		eSprite == "DogB" || 
+		eSprite == "DogRB")
+		&& ptx.y == 0 && ptx.x > 0) {
+		e->getComponent<CAnimation>().animation = m_game->assets().getAnimation("DogR");
 	}
 }
 
 void Scene_Game::sRender()
 {
 	// background changes if paused
-	static const sf::Color bkg(100, 100, 255);
+	static const sf::Color bkg(81, 193, 224);
 	static const sf::Color pauseBackground(50, 50, 150);
 	m_game->window().clear((m_isPaused ? pauseBackground : bkg));
 
 	// set the view to center on the player 
-	// this is a side scroller so only worry about X axis
 	auto& pPos = m_player->getComponent<CTransform>().pos;
 	float centerX = std::max(m_game->window().getSize().x / 2.f, pPos.x);
-
+	
+	
 	sf::View view = m_game->window().getView();
 	view.setCenter(pPos);
-
 	m_game->window().setView(view);
 
 
@@ -449,24 +521,17 @@ void Scene_Game::sRender()
 			}
 			
 		}
-		for (auto e : m_entityManager.getEntities("enemy"))
+		for (auto e : m_entityManager.getEntities("enemyO"))
 		{
+			auto& transform = e->getComponent<CTransform>();
+			auto& animation = e->getComponent<CAnimation>().animation;
 
-			if (e->hasComponent<CAnimation>())
-			{
-				auto& transform = e->getComponent<CTransform>();
-				auto& animation = e->getComponent<CAnimation>().animation;
-
-				animation.getSprite().setRotation(transform.angle);
-				animation.getSprite().setPosition(transform.pos.x, transform.pos.y);
-				animation.getSprite().setScale(transform.scale.x, transform.scale.y);
-				m_game->window().draw(animation.getSprite());
-			}
+			animation.getSprite().setRotation(transform.angle);
+			animation.getSprite().setPosition(transform.pos.x, transform.pos.y);
+			animation.getSprite().setScale(transform.scale.x, transform.scale.y);
+			m_game->window().draw(animation.getSprite());
 		}
-
 	}
-
-	
 
 	if (m_drawCollision)
 	{
@@ -653,7 +718,6 @@ void Scene_Game::sDoAction(const Action& action)
 	//}
 }
 
-
 void Scene_Game::sAnimation()
 {
 
@@ -671,9 +735,11 @@ void Scene_Game::sAnimation()
 	}
 }
 
-
 void Scene_Game::onEnd()
 {
+	MusicPlayer::getInstance().stop();
+	MusicPlayer::getInstance().play("menuTheme2");
+	MusicPlayer::getInstance().setVolume(15);
 	m_game->changeScene(SceneID::LEVELS, true);
 }
 
@@ -687,11 +753,6 @@ void Scene_Game::sDebug()
 
 sf::Vector2f Scene_Game::gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity)
 {
-	// (left, bot) of grix,gidy)
-
-	// this is for side scroll, and based on window height being the same as world height
-	// to be more generic and support scrolling up and down as well as left and right it
-	// should be based on world size not window size
 	float x = 0.f + gridX * m_gridSize.x;
 	float y = 2048.f - gridY * m_gridSize.y;
 
@@ -736,7 +797,7 @@ void Scene_Game::loadFromFile(const std::string& path)
 			confFile >> name >> gx >> gy;
 
 			auto e = m_entityManager.addEntity("tile");
-			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true);
+			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true, false);
 			e->addComponent<CBoundingBox>(m_game->assets().getAnimation(name).getSize());
 			e->addComponent<CTransform>(gridToMidPixel(gx, gy, e));
 		}
@@ -747,7 +808,7 @@ void Scene_Game::loadFromFile(const std::string& path)
 			confFile >> name >> gx >> gy;
 
 			auto e = m_entityManager.addEntity("tileGrass");
-			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true);
+			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true, false);
 			e->addComponent<CBoundingBox>(m_game->assets().getAnimation(name).getSize());
 			e->addComponent<CTransform>(gridToMidPixel(gx, gy, e));
 		}
@@ -758,7 +819,7 @@ void Scene_Game::loadFromFile(const std::string& path)
 			confFile >> name >> gx >> gy;
 
 			auto e = m_entityManager.addEntity("dec");
-			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true);
+			e->addComponent<CAnimation>(m_game->assets().getAnimation(name), true, false);
 			e->addComponent<CTransform>(gridToMidPixel(gx, gy, e));
 		}
 		else if (token == "Player")
@@ -770,7 +831,6 @@ void Scene_Game::loadFromFile(const std::string& path)
 				m_playerConfig.SPEED >>
 				m_playerConfig.MAXSPEED;
 		}
-
 		else if (token == "Enemy")
 		{
 			EnemyConfig enemy;
@@ -778,16 +838,14 @@ void Scene_Game::loadFromFile(const std::string& path)
 			confFile >>
 				enemy.name >>
 				enemy.X >>
-				enemy.Y >>
-				enemy.targetX >>
-				enemy.targetY;
+				enemy.Y;
 
 			m_enemyConfigVec.push_back(enemy);
 		}
 
 		else if (token == "#")
 		{
-			; // ignore comments
+			// ignore comments
 			std::string tmp;
 			std::getline(confFile, tmp);
 			std::cout << "# " << tmp << "\n";
@@ -801,12 +859,11 @@ void Scene_Game::loadFromFile(const std::string& path)
 	}
 }
 
-
 void Scene_Game::spawnPlayer()
 {
 
 	m_player = m_entityManager.addEntity("player");
-	m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Run"), true);
+	m_player->addComponent<CAnimation>(m_game->assets().getAnimation("Run"), true, false);
 	m_player->addComponent<CTransform>(gridToMidPixel(m_playerConfig.X, m_playerConfig.Y, m_player));
 	m_player->addComponent<CBoundingBox>(sf::Vector2f(50, 50));
 	m_player->addComponent<CState>();
@@ -819,22 +876,32 @@ void Scene_Game::spawnEnemies()
 	for (EnemyConfig e : m_enemyConfigVec) {
 		auto enemy = m_entityManager.addEntity("enemy");
 		
-		
 		if (e.name == "purcopine") {
-			enemy->addComponent<CAnimation>(m_game->assets().getAnimation("PurcoRun"), true);
-			//enemy->addComponent<CBoundingBox>(m_game->assets().getAnimation("PurcoRun").getSize());
-			enemy->addComponent<CBoundingBox>(sf::Vector2f(64,64));
+			enemy->addComponent<CAnimation>(m_game->assets().getAnimation("PurcoRun"), true, false);
 		}
 		if (e.name == "dog") {
-			enemy->addComponent<CAnimation>(m_game->assets().getAnimation(""), true);
+			enemy->addComponent<CAnimation>(m_game->assets().getAnimation("DogR"), true, false);
 		}
-		enemy->addComponent<CState>();
+		enemy->addComponent<CBoundingBox>(sf::Vector2f(64, 64));
 		auto & etx = enemy->addComponent<CTransform>(gridToMidPixel(e.X, e.Y, enemy));
-		etx.vel.y = 0.f;
+		etx.vel.y = -2.f;
 		etx.vel.x = 0.f;
 		enemy->addComponent<CDirection>();
 
 	}
+}
+
+void Scene_Game::spawnPoop(sf::Vector2f pos)
+{
+	auto enemyObstacle = m_entityManager.addEntity("enemyO");
+	//auto pos = e->getComponent<CTransform>().pos;
+	
+	enemyObstacle->addComponent<CAnimation>(m_game->assets().getAnimation("Poop"), true, false);
+	enemyObstacle->addComponent<CBoundingBox>(sf::Vector2f(60, 49));
+	enemyObstacle->addComponent<CTransform>(gridToMidPixel(pos.x, pos.y, enemyObstacle));
+	auto posN = enemyObstacle->getComponent<CTransform>().pos;
+	std::cout << posN.x << ", " << posN.y <<"\n";
+	//enemyObstacle->addComponent<CLifespan>(10000);
 }
 
 void Scene_Game::moveEnemies() 
@@ -876,6 +943,3 @@ bool Scene_Game::checkIfWon()
 	return m_wonGame;
 }
 
-void Scene_Game::spawnBullet(std::shared_ptr<Entity> e)
-{
-}

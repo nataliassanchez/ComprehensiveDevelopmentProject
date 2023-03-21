@@ -15,11 +15,12 @@ class Scene_Game : public Scene {
 	{
 		std::string name;
 		float X{ 0.f }, Y{ 0.f };
-		float targetX{ 0.f }, targetY{ 0.f };
-
 	};
 
 protected:
+
+	sf::Vector2u            m_windowSize{ 1728, 704 };
+	//sf::RenderWindow        m_window;
 
 	std::shared_ptr<Entity>			m_player;
 	std::string						m_levelPath;
@@ -32,6 +33,7 @@ protected:
 	sf::Text						m_gridText;
 	bool							m_wonGame{false};
 	mutable bool					playOnce{ true };
+	mutable bool					drawOnce{ true };
 
 	void	init(const std::string& levelPath);
 	void	registerActions();
@@ -50,6 +52,7 @@ public:
 	void sLifespan();
 	void sEnemySpawner();
 	void sCollision();
+	void dogObstables(EntityVec& gt, EntityVec& e);
 	void PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies);
 	void GrassCollision(EntityVec& players);
 	void PlayerEnemyCol(EntityVec& players, EntityVec& enemies);
@@ -69,7 +72,7 @@ public:
 	void moveEnemies();
 	void addPlayerPoints(int tiles);
 	bool checkIfWon();
-	void spawnBullet(std::shared_ptr<Entity>);
+	void spawnPoop(sf::Vector2f pos);
 
 };
 

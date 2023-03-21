@@ -890,8 +890,9 @@ Tile Fence3 27 25
 
 Dec House 20.5 3
 #     gX, gY, sX, sM,  
-Player 1  24    5  20 
+Player 17  24    5  20 
 
-Enemy purcopine 10 7 19 1
-Enemy purcopine 2 2 19 1
-Enemy purcopine 10 22 19 1
+Enemy purcopine 10 7
+Enemy purcopine 2 2 
+Enemy purcopine 10 22
+Enemy dog 10 22

@@ -1,6 +1,6 @@
 # GameEngine Config
 
-Window  1920 1088
+Window  1920 1080
 
 Font    Arial      	../assets/fonts/arial.ttf
 Font    Mario      	../assets/fonts/mario.ttf
@@ -11,6 +11,7 @@ Font 	Powerful	../assets/fonts/Powerful.ttf
 
 Texture Lawn        ../assets/media/Background.jpg
 Texture Logo        ../assets/media/logo.png
+Texture Levels	    ../assets/media/grassLawn.jpg
 
 Texture TextPablo   ../assets/media/PabloSprite.png
 Texture TextStand   ../assets/media/PabloStand.png
@@ -35,7 +36,12 @@ Texture TextHouse    ../assets/media/house.png
 Texture TextPurcopine1    ../assets/media/purco1.png 
 Texture TextPurcopine2    ../assets/media/purco2.png
 Texture TextPurcopine3    ../assets/media/purco3.png  
-Texture TextPurcopine4    ../assets/media/purco4.png  
+Texture TextPurcopine4    ../assets/media/purco4.png
+Texture TextDogFront	 ../assets/media/dogFront.png
+Texture TextDogBack	 ../assets/media/dogBack.png
+Texture TextDogRun	 ../assets/media/dog01.png
+Texture TextDog02	 ../assets/media/dog02.png
+Texture TextPoop		../assets/media/poop.png
 
 #JSON                ../assets/media/Entities.json
 
@@ -63,6 +69,12 @@ Animation PurcoRun	TextPurcopine1    1 0
 Animation PurcoUp	TextPurcopine2    1 0
 Animation PurcoD	TextPurcopine3    1 0
 Animation PurcoB	TextPurcopine4    1 0
+Animation DogF		TextDogFront	 1 0
+Animation DogB		TextDogBack	 1 0
+Animation DogR		TextDogRun	 1 0
+Animation DogRB		TextDog02	 1 0
+Animation Poop		TextPoop	1 0
+
 #
 # SOUNDS
 Sound victory ../assets/Sound/victory.wav
