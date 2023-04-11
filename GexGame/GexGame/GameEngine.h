@@ -16,7 +16,7 @@
 
 
 class Scene;
-enum class SceneID { NONE, MENU, LEVELS, LEVEL1,LEVEL2, LEVEL3, LEVEL4, LEVEL5, FTR };
+enum class SceneID { NONE, MENU, OPTIONS, LEVELS, LEVEL1,LEVEL2, LEVEL3, LEVEL4, LEVEL5, LAST = LEVEL5};
 
 using Sptr = std::shared_ptr<Scene>;
 using SceneMap = std::map<SceneID, Sptr>;
@@ -58,7 +58,7 @@ public:
     const Assets&           assets() const;
     bool                    isRunning();
     void                    changeScene(SceneID, bool endCurrentScene = false);
-
+    SceneID                 getCurrentScene();
     void                    quitLevel();
     void                    backLevel();
 };

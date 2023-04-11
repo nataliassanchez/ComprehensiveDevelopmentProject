@@ -2,11 +2,10 @@
 
 #include "Scene.h"
 
-
-class Scene_Levels : public Scene
+class Scene_Options : public Scene
 {
 private:
-	std::vector<std::pair<SceneID, std::string>>	m_menuItems;
+	std::vector<std::pair<bool, std::string>>	m_menuItems;
 	sf::Text					m_menuText;
 	std::vector<std::string>	m_levelPaths;
 	int							m_menuIndex{ 0 };
@@ -19,12 +18,13 @@ private:
 	void onEnd() override;
 public:
 
-	Scene_Levels(GameEngine* gameEngine);
+	Scene_Options(GameEngine* gameEngine);
 
 	void update(sf::Time dt) override;
 
 	void sRender() override;
 	void sDoAction(const Action& action) override;
+	void playToggle();
 
 };
 

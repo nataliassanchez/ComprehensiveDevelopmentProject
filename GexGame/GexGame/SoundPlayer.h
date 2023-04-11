@@ -1,7 +1,3 @@
-//
-// Created by David Burchill on 2022-11-29.
-//
-
 #ifndef SFMLCLASS_SOUNDPLAYER_H
 #define SFMLCLASS_SOUNDPLAYER_H
 
@@ -24,6 +20,7 @@ protected:
 private:
     std::map<String, std::unique_ptr<sf::SoundBuffer>>  m_soundBuffers;
     std::list<sf::Sound>                                m_sounds;
+    bool                                         m_isPlaying{ true };
 
 public:
     static SoundPlayer& getInstance();
@@ -35,11 +32,12 @@ public:
     SoundPlayer& operator=(SoundPlayer&&) = delete;
 
 public:
-    void			    play(String effect);
+    void			    play(String effects);
     void			    play(String effect, sf::Vector2f position);
     void			    removeStoppedSounds();
     void			    setListnerPosition(sf::Vector2f position);
     sf::Vector2f	    getListnerPosition() const;
+    void			    setSoundState(bool state);
 
     bool                isEmpty() const;
     void			    loadBuffer(String id, const String path);

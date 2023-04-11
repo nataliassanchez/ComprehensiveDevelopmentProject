@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 
+static long int globalScore{ 0 };
 class Scene_Game : public Scene {
 
     struct PlayerConfig
@@ -26,6 +27,7 @@ protected:
 	std::string						m_levelPath;
 	PlayerConfig					m_playerConfig;
 	std::vector <EnemyConfig>		m_enemyConfigVec;
+	std::vector <std::pair<int, int>>m_coordinatesConfig;
 	bool							m_drawTextures{ true };
 	bool							m_drawCollision{ false };
 	bool							m_drawGrid{ false };
@@ -34,6 +36,10 @@ protected:
 	bool							m_wonGame{false};
 	mutable bool					playOnce{ true };
 	mutable bool					drawOnce{ true };
+	mutable int						bonus{ 0 };
+	mutable int						negativePoints{ 0 };
+	sf::Text						m_statisticsScore;
+	sf::Sprite						m_background;
 
 	void	init(const std::string& levelPath);
 	void	registerActions();
@@ -43,23 +49,22 @@ protected:
 public:
 	Scene_Game(GameEngine* gameEngine, const std::string& levelPath);
 
-	void update() override;
+	void update(sf::Time dt) override;
 	void sRender() override;
+	void renderEntity(std::string entity);
 	void sDoAction(const Action& action) override;
 
 	void sMovement();
 	void sAnimation();
-	void sLifespan();
-	void sEnemySpawner();
+	void sLifespan(sf::Time dt);
 	void sCollision();
 	void dogObstables(EntityVec& gt, EntityVec& e);
-	void PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies);
-	void GrassCollision(EntityVec& players);
-	void PlayerEnemyCol(EntityVec& players, EntityVec& enemies);
+	void playerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies);
+	void grassCollision(EntityVec& players);
+	void playerEnemyCol(EntityVec& players, EntityVec& enemies);
+	void playerObstablesCol();
 	void checkEnemyTileCol(EntityVec& enemies, NttPtr& t);
-	void EnemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e);
-	void sDebug();
-	void drawLine();
+	void enemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e);
 
 	void playerCheckState();
 
@@ -69,10 +74,11 @@ public:
 	void loadFromFile(const std::string& filename);
 	void spawnPlayer();
 	void spawnEnemies();
-	void moveEnemies();
-	void addPlayerPoints(int tiles);
+	void spawnBonus();
+	void addPlayerPoints();
 	bool checkIfWon();
 	void spawnPoop(sf::Vector2f pos);
+	void bonusCollisions();
 
 };
 

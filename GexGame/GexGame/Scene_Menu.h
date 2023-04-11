@@ -26,10 +26,10 @@ public:
     Scene_Menu(GameEngine* gameEngine);
 
     void        registerItem(SceneID key, std::string item);
-    void		update() override;
+    void		update(sf::Time dt) override;
     void		sDoAction(const Action& action) override;
     void		sRender() override;
-
+    void        playToggle();
 };
 
 

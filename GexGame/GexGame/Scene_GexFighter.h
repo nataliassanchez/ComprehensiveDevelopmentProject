@@ -80,7 +80,6 @@ private:
 public:
     Scene_GexFighter(GameEngine* gameEngine, const std::string& configPath);
 
-    void		                    update() override;
     void		                    sDoAction(const Action& action) override;
     void		                    sRender() override;
 

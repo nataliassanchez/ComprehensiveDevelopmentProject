@@ -34,7 +34,9 @@ SoundPlayer& SoundPlayer::getInstance() {
 
 
 void SoundPlayer::play(String effect) {
-    play(effect, getListnerPosition());
+    if (m_isPlaying) {
+        play(effect, getListnerPosition());
+    }        
 }
 
 
@@ -46,8 +48,9 @@ void SoundPlayer::play(String effect, sf::Vector2f position) {
     sound.setPosition(position.x, -position.y, 0.f);
     sound.setAttenuation(Attenuation);
     sound.setMinDistance(MinDistance3D);
-
-    sound.play();
+    if (m_isPlaying) {
+        sound.play();
+    }
 }
 
 
@@ -66,6 +69,11 @@ void SoundPlayer::setListnerPosition(sf::Vector2f position) {
 sf::Vector2f SoundPlayer::getListnerPosition() const {
     sf::Vector3f pos = sf::Listener::getPosition();
     return sf::Vector2f(pos.x, -pos.y);
+}
+
+void SoundPlayer::setSoundState(bool state)
+{
+    m_isPlaying = state;
 }
 
 

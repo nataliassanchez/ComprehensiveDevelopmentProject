@@ -1,28 +1,22 @@
-#include "Scene_Levels.h"
+#include "Scene_Options.h"
 #include "MusicPlayer.h"
+#include "SoundPlayer.h"
 
-void Scene_Levels::init()
+void Scene_Options::init()
 {
 	registerAction(sf::Keyboard::W, "UP");
 	registerAction(sf::Keyboard::Up, "UP");
 	registerAction(sf::Keyboard::S, "DOWN");
 	registerAction(sf::Keyboard::Down, "DOWN");
-	registerAction(sf::Keyboard::Enter, "PLAY");
+	registerAction(sf::Keyboard::Enter, "SELECT");
+	registerAction(sf::Keyboard::Space, "SELECT");
 	registerAction(sf::Keyboard::Escape, "QUIT");
 	registerAction(sf::Keyboard::Q, "QUIT");
 
-	m_title = "LEVELS";
-	registerItem(SceneID::LEVEL1,"Level 1");
-	registerItem(SceneID::LEVEL2, "Level 2");
-	registerItem(SceneID::LEVEL3, "Level 3");
-	registerItem(SceneID::LEVEL4, "Level 4");
-	registerItem(SceneID::LEVEL5, "Level 5");
+	m_title = "OPTIONS";
 
-	m_levelPaths.push_back("../assets/level1.txt");
-	m_levelPaths.push_back("../assets/level2.txt");
-	m_levelPaths.push_back("../assets/level3.txt");
-	m_levelPaths.push_back("../assets/level4.txt");
-	m_levelPaths.push_back("../assets/level5.txt");
+	m_menuItems.push_back(std::make_pair(true, "Music: " ));
+	m_menuItems.push_back(std::make_pair(true, "Sound effects: " ));
 
 	m_menuText.setFont(m_game->assets().getFont("MegaSurprise"));
 
@@ -30,27 +24,28 @@ void Scene_Levels::init()
 	m_menuText.setCharacterSize(CHAR_SIZE);
 }
 
-void Scene_Levels::registerItem(SceneID key, std::string item) {
-	m_menuItems.push_back(std::make_pair(key, item));
-}
-
-void Scene_Levels::onEnd()
+void Scene_Options::registerItem(SceneID key, std::string item)
 {
-	m_game->changeScene(SceneID::MENU, true);
+	
 }
 
-Scene_Levels::Scene_Levels(GameEngine* gameEngine)
+void Scene_Options::onEnd()
+{
+	m_game->changeScene(SceneID::MENU, false);
+}
+
+Scene_Options::Scene_Options(GameEngine* gameEngine)
 	:Scene(gameEngine)
 {
 	init();
 }
 
-void Scene_Levels::update(sf::Time dt)
+void Scene_Options::update(sf::Time dt)
 {
 	m_entityManager.update();
 }
 
-void Scene_Levels::sRender()
+void Scene_Options::sRender()
 {
 	sf::View view = m_game->window().getView();
 	view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
@@ -74,42 +69,56 @@ void Scene_Levels::sRender()
 	m_menuText.setString(m_title);
 	m_menuText.setPosition(40, 10);
 	m_game->window().draw(m_menuText);
-	sf::RectangleShape rec(sf::Vector2f(500, 90));
-	rec.setFillColor(sf::Color(20, 135, 53));
 
 	for (size_t i{ 0 }; i < m_menuItems.size(); ++i)
 	{
-		rec.setPosition(32, 32 + (i + 1) * 100);
 		m_menuText.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
 		m_menuText.setPosition(60, 32 + (i + 1) * 100);
-		m_menuText.setString(m_menuItems.at(i).second);
-		m_game->window().draw(rec);
+		std::string state = m_menuItems.at(i).first == true ? "ON" : "OFF";
+		m_menuText.setString(m_menuItems.at(i).second + state);
 		m_game->window().draw(m_menuText);
 	}
 
 	m_game->window().draw(footer);
 }
 
-void Scene_Levels::sDoAction(const Action& action)
+void Scene_Options::sDoAction(const Action& action)
 {
 	if (action.type() == "START")
 	{
 		if (action.name() == "UP")
 		{
 			m_menuIndex = (m_menuIndex + m_menuItems.size() - 1) % m_menuItems.size();
+			playToggle();
 		}
 		else if (action.name() == "DOWN")
 		{
 			m_menuIndex = (m_menuIndex + 1) % m_menuItems.size();
+			playToggle();
 		}
 		// TODO generalize
-		else if (action.name() == "PLAY")
+		else if (action.name() == "SELECT")
 		{
-			m_game->changeScene(m_menuItems.at(m_menuIndex).first);
+			m_menuItems.at(m_menuIndex).first = !m_menuItems.at(m_menuIndex).first;
+			if (m_menuIndex == 0 && m_menuItems.at(m_menuIndex).first == false)
+				MusicPlayer::getInstance().setPaused(true);
+			if (m_menuIndex == 0 && m_menuItems.at(m_menuIndex).first == true)
+				MusicPlayer::getInstance().setPaused(false);
+
+			if (m_menuIndex == 1 && m_menuItems.at(m_menuIndex).first == false)
+				SoundPlayer::getInstance().setSoundState(false);
+			if (m_menuIndex == 1 && m_menuItems.at(m_menuIndex).first == true)
+				SoundPlayer::getInstance().setSoundState(true);		
+			playToggle();
 		}
 		else if (action.name() == "QUIT")
 		{
 			onEnd();
 		}
 	}
+}
+
+void Scene_Options::playToggle()
+{
+	SoundPlayer::getInstance().play("toggle");
 }

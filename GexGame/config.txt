@@ -8,10 +8,13 @@ Font    Megaman    	../assets/fonts/megaman.ttf
 Font	MegaSurprise 	../assets/fonts/megaSurprise.ttf
 Font 	Organic		../assets/fonts/OrganicRelief.ttf 
 Font 	Powerful	../assets/fonts/Powerful.ttf
+Font 	Royal		../assets/fonts/Royalacid_o.ttf
+
 
 Texture Lawn        ../assets/media/Background.jpg
 Texture Logo        ../assets/media/logo.png
 Texture Levels	    ../assets/media/grassLawn.jpg
+Texture Victory	    ../assets/media/victoryBkg.jpg
 
 Texture TextPablo   ../assets/media/PabloSprite.png
 Texture TextStand   ../assets/media/PabloStand.png
@@ -42,6 +45,7 @@ Texture TextDogBack	 ../assets/media/dogBack.png
 Texture TextDogRun	 ../assets/media/dog01.png
 Texture TextDog02	 ../assets/media/dog02.png
 Texture TextPoop		../assets/media/poop.png
+Texture TextStar		../assets/media/star.png
 
 #JSON                ../assets/media/Entities.json
 
@@ -74,10 +78,15 @@ Animation DogB		TextDogBack	 1 0
 Animation DogR		TextDogRun	 1 0
 Animation DogRB		TextDog02	 1 0
 Animation Poop		TextPoop	1 0
-
+Animation Star 		TextStar	1 0
 #
 # SOUNDS
 Sound victory ../assets/Sound/victory.wav
 Sound crash ../assets/Sound/punch.wav
 Sound defeat ../assets/Sound/defeat.wav
+Sound toggle ../assets/Sound/toggle.wav
+Sound step ../assets/Sound/step.wav
+Sound bonus ../assets/Sound/bonus.wav
+Sound dog ../assets/Sound/dogbark.wav
+
 

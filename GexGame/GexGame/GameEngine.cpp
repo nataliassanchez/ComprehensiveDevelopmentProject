@@ -17,6 +17,7 @@
 #include "MusicPlayer.h"
 #include "SoundPlayer.h"
 #include "Scene_Levels.h"
+#include "Scene_Options.h"
 
 
 const sf::Time GameEngine::TIME_PER_FRAME = sf::seconds((1.f / 60.f));
@@ -44,8 +45,8 @@ void GameEngine::createMenu() {
     m_sceneMap[SceneID::MENU] = menuScene;
 
     // add items to menu_scene
-    menuScene->registerItem(SceneID::LEVELS, "Start");
-    menuScene->registerItem(SceneID::NONE, "Options");
+    menuScene->registerItem(SceneID::LEVEL1, "Start");
+    menuScene->registerItem(SceneID::OPTIONS, "Options");
     
 
 }
@@ -60,6 +61,11 @@ void GameEngine::createFactories() {
     m_factories[SceneID::LEVELS] = std::function<Sptr()>(
         [this]() -> Sptr {
             return std::make_shared<Scene_Levels>(this);
+        });
+
+    m_factories[SceneID::OPTIONS] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Options>(this);
         });
 
     m_factories[SceneID::LEVEL1] = std::function<Sptr()>(
@@ -78,12 +84,10 @@ void GameEngine::createFactories() {
         [this]() -> Sptr {
             return std::make_shared<Scene_Game>(this, "../assets/level4.txt");
         });
-
-
-    m_factories[SceneID::FTR] = std::function<Sptr()> (
-            [this]() -> Sptr {
-                return  std::make_shared<Scene_GexFighter>(this, "../assets/gexFighters.txt");
-            });
+    m_factories[SceneID::LEVEL5] = std::function<Sptr()>(
+        [this]() -> Sptr {
+            return std::make_shared<Scene_Game>(this, "../assets/level5.txt");
+        });
 }
 
 
@@ -136,13 +140,11 @@ void GameEngine::run() {
         timeSinceLastUpdate += clock.restart();
         while (timeSinceLastUpdate > SPF)
         {
-            currentScene()->update();				// update world
+            currentScene()->update(SPF);				// update world
             timeSinceLastUpdate -= SPF;
         }
 
-
         currentScene()->sRender();					// render world
-    
 
         m_window.setView(m_window.getDefaultView());
         m_window.draw(m_statisticsText);
@@ -195,6 +197,11 @@ void GameEngine::changeScene(SceneID id,  bool endCurrentScene) {
         m_sceneMap[id] = m_factories[id]();
 
     m_currentScene = id;
+}
+
+SceneID GameEngine::getCurrentScene()
+{
+    return m_currentScene;
 }
 
 

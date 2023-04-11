@@ -21,10 +21,14 @@ MusicPlayer& MusicPlayer::getInstance() {
 void MusicPlayer::play(String theme) {
     if (!m_music.openFromFile(m_filenames[theme]))
         throw std::runtime_error("Music could not open file");
-
-    m_music.setVolume(m_volume);
-    m_music.setLoop(true);
-    m_music.play();
+    if (m_isPlaying) {
+        m_music.setVolume(m_volume);
+        m_music.setLoop(true);
+        m_music.play();
+    }
+    else {
+        stop();
+    }
 }
 
 
@@ -34,10 +38,16 @@ void MusicPlayer::stop() {
 
 
 void MusicPlayer::setPaused(bool paused) {
-    if (paused)
+    if (paused) {
         m_music.pause();
-    else
+        m_isPlaying = false;
+    }
+        
+    else {
         m_music.play();
+        m_isPlaying = true;
+    }
+        
 }
 
 

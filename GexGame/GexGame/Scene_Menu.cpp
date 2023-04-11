@@ -5,6 +5,7 @@
 #include <memory>
 #include "Utilities.h"
 #include "Components.h"
+#include "SoundPlayer.h"
 
 
 
@@ -43,7 +44,7 @@ void Scene_Menu::registerItem(SceneID key, std::string item) {
 }
 
 
-void Scene_Menu::update() {
+void Scene_Menu::update(sf::Time dt) {
     m_entityManager.update();
 }
 
@@ -106,15 +107,18 @@ void Scene_Menu::sDoAction(const Action &action) {
         if (action.name() == "RIGHT")
         {
             m_menuIndex = (m_menuIndex + m_menuItems.size() - 1) % m_menuItems.size();
+            playToggle();
         }
         else if (action.name() == "LEFT")
         {
             m_menuIndex = (m_menuIndex + 1) % m_menuItems.size();
+            playToggle();
         }
         // TODO generalize
         else if (action.name() == "PLAY")
         {
            m_game->changeScene( m_menuItems.at(m_menuIndex).first );
+           playToggle();
         }
         else if (action.name() == "QUIT")
         {
@@ -128,4 +132,9 @@ void Scene_Menu::sDoAction(const Action &action) {
 void Scene_Menu::onEnd()
 {
     m_game->window().close();
+}
+
+void Scene_Menu::playToggle()
+{
+    SoundPlayer::getInstance().play("toggle");
 }

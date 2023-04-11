@@ -38,6 +38,8 @@ void Scene_Game::init(const std::string& levelPath)
 	MusicPlayer::getInstance().play("menuTheme");
 	MusicPlayer::getInstance().setVolume(15);
 
+	
+
 }
 
 void Scene_Game::registerActions()
@@ -45,10 +47,12 @@ void Scene_Game::registerActions()
 	registerAction(sf::Keyboard::P, "PAUSE");
 	registerAction(sf::Keyboard::Escape, "QUIT");
 	registerAction(sf::Keyboard::Q, "QUIT");
+	registerAction(sf::Keyboard::N, "NEXT");
 
 	registerAction(sf::Keyboard::T, "TOGGLE_TEXTURE");
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
 	registerAction(sf::Keyboard::G, "TOGGLE_GRID");
+	registerAction(sf::Keyboard::H, "WON");
 
 	registerAction(sf::Keyboard::A, "LEFT");
 	registerAction(sf::Keyboard::Left, "LEFT");
@@ -62,23 +66,26 @@ void Scene_Game::registerActions()
 	registerAction(sf::Keyboard::Down, "DOWN");
 }
 
-void Scene_Game::update()
+void Scene_Game::update(sf::Time dt)
 {
 	if (m_isPaused)
 		return;
 
 	m_entityManager.update();
 
-	if (checkIfWon() || m_isGameOver)
+	if (checkIfWon() || m_isGameOver) {
 		return;
+	}
+		
 
 	// TODO pause function
 	
 
 	sMovement();
-	sLifespan();
+	sLifespan(dt);
 	sCollision();
 	sAnimation();
+	
 
 	playerCheckState();
 	
@@ -170,15 +177,23 @@ void Scene_Game::playerCheckState()
 	
 }
 
-void Scene_Game::sLifespan()
+void Scene_Game::sLifespan(sf::Time dt)
 {
 
-	
+	for (auto e : m_entityManager.getEntities()) {
 
-}
+		if (e->hasComponent<CLifespan>()) {
+			
+			auto& remaining = e->getComponent<CLifespan>().remaining -= dt.asSeconds();
 
-void Scene_Game::sEnemySpawner()
-{
+
+
+			if (remaining < sf::Time::Zero.asSeconds()) {
+				e->destroy();
+			}
+		}
+	}
+
 }
 
 void Scene_Game::sCollision()
@@ -190,23 +205,34 @@ void Scene_Game::sCollision()
 	auto grassTiles = m_entityManager.getEntities("tileGrass");
 
 	//Check player and tiles collisions
-	PlayerTilesCollisions(players, tiles, enemies);
+	playerTilesCollisions(players, tiles, enemies);
 
 	//Check enemies and player collisions
-	PlayerEnemyCol(players, enemies);
+	playerEnemyCol(players, enemies);
 
 	//Check lawn mowner and grass collision
-	GrassCollision(players);
+	grassCollision(players);
 	
+	bonusCollisions();
 	
 	dogObstables(grassTiles, enemies);
+
+	playerObstablesCol();
 	
+	addPlayerPoints();
+
+	std::uniform_int_distribution rand(0, 2000);
+	auto number = rand(rng);
+
+	if (number > 1340 && number < 1345) {
+		spawnBonus();
+	}
 	
 }
 
 void Scene_Game::dogObstables(EntityVec& gt, EntityVec& enemies)
 {
-	std::uniform_int_distribution rand(0, 1000);
+	std::uniform_int_distribution rand(0, 2000);
 	auto number = rand(rng);
 
 	if (number == 3)
@@ -227,9 +253,10 @@ void Scene_Game::dogObstables(EntityVec& gt, EntityVec& enemies)
 
 					if (overlap.x > 0 && overlap.y > 0)  // +ve overlap in both x and y means collision
 					{
-						auto posx = floor(e->getComponent<CTransform>().pos.x / 64);
-						auto posy = floor((2048 - e->getComponent<CTransform>().pos.y) / 64);
+						auto posx = floor(t->getComponent<CTransform>().pos.x / 64);
+						auto posy = floor((2048 - t->getComponent<CTransform>().pos.y) / 64);
 						spawnPoop(sf::Vector2f(posx, posy));
+						SoundPlayer::getInstance().play("dog", sf::Vector2f(posx, posy));
 						drawOnce = false;
 					}
 					
@@ -239,7 +266,7 @@ void Scene_Game::dogObstables(EntityVec& gt, EntityVec& enemies)
 	}
 }
 
-void Scene_Game::PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies)
+void Scene_Game::playerTilesCollisions(EntityVec& players, EntityVec& tiles, EntityVec& enemies)
 {
 	for (auto p : players)
 	{
@@ -273,7 +300,6 @@ void Scene_Game::PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, Ent
 					else
 						p->getComponent<CTransform>().pos.x += overlap.x;
 				}
-
 			}
 			//Check enemies and tiles collisions
 			checkEnemyTileCol(enemies, t);
@@ -281,47 +307,39 @@ void Scene_Game::PlayerTilesCollisions(EntityVec& players, EntityVec& tiles, Ent
 	}
 }
 
-void Scene_Game::GrassCollision(EntityVec& players)
+void Scene_Game::grassCollision(EntityVec& players)
 {
 	auto tilesGrass = m_entityManager.getEntities("tileGrass");
 	auto enemies = m_entityManager.getEntities("enemy");
+	
 	for (auto p : players) {
 		for (auto t : tilesGrass)
 		{
 			auto overlap = Physics::getOverlap(p, t);
-			int tilesInARow = 0;
-
-
 			if (overlap.x > 0 && overlap.y > 0) 
 			{
 				auto prevOverlap = Physics::getPreviousOverlap(p, t);
 				auto& ptx = p->getComponent<CTransform>();
 				auto ttx = t->getComponent<CTransform>();
 
-
-				// collision is in the y direction
 				if (prevOverlap.x > 0)
 				{
 					if (ptx.prevPos.y < ttx.prevPos.y)
-					{   // player standing on something isGrounded
+					{   
 						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true, false);
 					}
 					else
-					{  // player hit something from below
+					{  
 						t->addComponent<CAnimation>(m_game->assets().getAnimation("Short"), true, false);
 					}
 					t->getComponent<CAnimation>().isShort = true;
 				}
-				// collision is in the x direction
-				addPlayerPoints(tilesInARow);
 			}
-			
 		}
 	}
-	
 }
 
-void Scene_Game::PlayerEnemyCol(EntityVec& players, EntityVec& enemies)
+void Scene_Game::playerEnemyCol(EntityVec& players, EntityVec& enemies)
 {
 	for (auto p : players) {
 		for (auto e : enemies) {
@@ -342,6 +360,24 @@ void Scene_Game::PlayerEnemyCol(EntityVec& players, EntityVec& enemies)
 				
 			}
 
+		}
+	}
+}
+
+void Scene_Game::playerObstablesCol()
+{
+	sf::View view = m_game->window().getView();
+
+	if (m_player->hasComponent<CBoundingBox>()) {
+		for (auto e : m_entityManager.getEntities("enemyO"))
+		{
+			auto overlap = Physics::getOverlap(m_player, e);
+			if (overlap.x > 0 && overlap.y > 0)
+			{
+				negativePoints += 25;
+				SoundPlayer::getInstance().play("step");
+				e->destroy();
+			}
 		}
 	}
 }
@@ -385,13 +421,13 @@ void Scene_Game::checkEnemyTileCol(EntityVec& enemies, NttPtr& t)
 					e->getComponent<CTransform>().pos.x += overlap.x;
 			}
 
-			EnemiesAI(number, ptx.vel, e);
+			enemiesAI(number, ptx.vel, e);
 
 		}
 	}
 }
 
-void Scene_Game::EnemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e)
+void Scene_Game::enemiesAI(const int& number, sf::Vector2f& ptx, NttPtr& e)
 {
 	switch (number)
 	{
@@ -487,50 +523,30 @@ void Scene_Game::sRender()
 	
 	
 	sf::View view = m_game->window().getView();
+	
 	view.setCenter(pPos);
 	m_game->window().setView(view);
 
+	int scoreP = m_player->getComponent<CScore>().score;
+	std::string str = "Score: " + std::to_string(scoreP);
+	
+	m_statisticsScore.setString(str);
+	m_statisticsScore.setCharacterSize(50);
+	m_statisticsScore.setFont(m_game->assets().getFont("Royal"));
+	m_statisticsScore.setPosition(view.getCenter().x - (view.getSize().x / 2) + 20,
+		view.getCenter().y - (view.getSize().y / 2)
+		);
+	sf::RectangleShape rec(sf::Vector2f(m_statisticsScore.getLocalBounds().width + 20, m_statisticsScore.getLocalBounds().height + 20));
+	rec.setPosition(view.getCenter().x - (view.getSize().x / 2) + 10,
+		view.getCenter().y - (view.getSize().y / 2));
+	rec.setFillColor(sf::Color(231, 144, 53));
+	std::array entities = { "tile", "tileGrass", "dec", "enemyO", "enemy","bonus", "player"};
 
 	// draw all entities
 	if (m_drawTextures)
 	{
-		for (auto e : m_entityManager.getEntities())
-		{
-	
-			if (e->hasComponent<CAnimation>())
-			{
-				auto& transform = e->getComponent<CTransform>();
-				auto& animation = e->getComponent<CAnimation>().animation;
-
-				animation.getSprite().setRotation(transform.angle);
-				animation.getSprite().setPosition(transform.pos.x, transform.pos.y);
-				animation.getSprite().setScale(transform.scale.x, transform.scale.y);
-				m_game->window().draw(animation.getSprite());
-
-				static sf::Text text("Score: ", m_game->assets().getFont("Arial"), 15);
-				if (e->hasComponent<CScore>()) {
-					int score = e->getComponent<CScore>().score;
-					std::string str = "Score: " + std::to_string(score);
-					text.setString(str);
-					centerOrigin(text);
-
-					sf::Vector2f offset(0.f, 40.f);
-					text.setPosition(transform.pos + offset);
-					m_game->window().draw(text);
-				}
-			}
-			
-		}
-		for (auto e : m_entityManager.getEntities("enemyO"))
-		{
-			auto& transform = e->getComponent<CTransform>();
-			auto& animation = e->getComponent<CAnimation>().animation;
-
-			animation.getSprite().setRotation(transform.angle);
-			animation.getSprite().setPosition(transform.pos.x, transform.pos.y);
-			animation.getSprite().setScale(transform.scale.x, transform.scale.y);
-			m_game->window().draw(animation.getSprite());
-		}
+		for(auto e : entities)
+			renderEntity(e);
 	}
 
 	if (m_drawCollision)
@@ -552,16 +568,35 @@ void Scene_Game::sRender()
 			}
 		}
 	}
+	sf::Text gameOver("GAME OVER", m_game->assets().getFont("Mario"), 200);
+	sf::Text returnText("Q: Return", m_game->assets().getFont("Mario"), 40);
 
 	if (m_isGameOver) {
-		sf::Text gameOver("GAME OVER", m_game->assets().getFont("Mario"), 200);
-		sf::Text returnText("Q: Return", m_game->assets().getFont("Mario"), 40);
 
 		SoundPlayer::getInstance().removeStoppedSounds();
 
 		if (checkIfWon()) {
+			
 			gameOver.setString("YOU WON");
+			returnText.setString("\nScore:" + std::to_string(scoreP) + "\nN: Next Level\nQ: Return");
+
+			auto nextScene = int(m_game->getCurrentScene()) + 1;
+			if (nextScene > 8) {
+				view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
+				m_game->window().setView(view);
+				m_game->window().clear();
+				m_game->window().draw(m_background);
+				
+				m_background.setTexture(m_game->assets().getTexture("Victory"));
+				m_background.setPosition(0.f, 0.f);
+
+				gameOver.setString("GAME COMPLETED");
+				gameOver.setCharacterSize(150);
+				returnText.setString("\nScore:" + std::to_string(globalScore) + "\nQ: Main Menu");
+				m_isPaused = true;
+			}
 			if (playOnce) {
+				globalScore += m_player->getComponent<CScore>().score;
 				SoundPlayer::getInstance().play("victory", view.getCenter());
 				playOnce = false;
 			}
@@ -586,7 +621,7 @@ void Scene_Game::sRender()
 		//MusicPlayer::getInstance().stop();
 	}
 
-	if (m_isPaused) {
+	if (m_isPaused && !m_wonGame) {
 		sf::Text paused("PAUSED", m_game->assets().getFont("Mario"), 200);
 		sf::Text returnText("Q: RETURN  P: CONTINUE", m_game->assets().getFont("Mario"),40);
 
@@ -602,6 +637,7 @@ void Scene_Game::sRender()
 		MusicPlayer::getInstance().setPaused(!m_isPaused);
 	}
 
+	
 
 	//// draw grid
 	sf::VertexArray lines(sf::Lines);
@@ -663,6 +699,39 @@ void Scene_Game::sRender()
 	}
 
 	//m_game->window().display();
+	m_game->window().draw(rec);
+	m_game->window().draw(m_statisticsScore);
+}
+
+void Scene_Game::renderEntity(std::string entity)
+{
+	for (auto e : m_entityManager.getEntities(entity))
+	{
+		auto& transform = e->getComponent<CTransform>();
+		auto& animation = e->getComponent<CAnimation>().animation;
+
+		animation.getSprite().setRotation(transform.angle);
+		animation.getSprite().setPosition(transform.pos.x, transform.pos.y);
+		animation.getSprite().setScale(transform.scale.x, transform.scale.y);
+		m_game->window().draw(animation.getSprite());
+
+		static sf::Text text("Score: ", m_game->assets().getFont("Arial"), 15);
+		if (e->hasComponent<CScore>()) {
+			int score = e->getComponent<CScore>().score;
+			std::string str = "Score: " + std::to_string(score);
+			text.setString(str);
+			centerOrigin(text);
+
+			sf::Vector2f offset(0.f, 40.f);
+			text.setPosition(transform.pos + offset);
+			m_game->window().draw(text);
+		}
+		if (e->hasComponent<CLifespan>()) {
+			if (e->getComponent<CLifespan>().remaining == 0) {
+				e->destroy();
+			}
+		}
+	}
 }
 
 void Scene_Game::sDoAction(const Action& action)
@@ -703,19 +772,17 @@ void Scene_Game::sDoAction(const Action& action)
 			m_player->getComponent<CInput>().left = false;
 			m_player->getComponent<CInput>().right = false;
 		}
+		else if (action.name() == "WON") {
+			m_isGameOver = true;
+			m_wonGame = true;
+		}
+		else if (action.name() == "NEXT" ) { // && checkIfWon()
+			auto nextScene = int(m_game->getCurrentScene()) + 1;
+			if(nextScene <= 8)
+				m_game->changeScene(SceneID(nextScene), true);
+		}
 
 	}
-
-
-	// on Key Release 
-	//else if (action.type() == "END")
-	//{
-	//	if (action.name() == "LEFT") { m_player->getComponent<CInput>().left = false; }
-	//	else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().right = false; }
-	//	else if (action.name() == "UP") { m_player->getComponent<CInput>().up = false; }
-	//	else if (action.name() == "DOWN") { m_player->getComponent<CInput>().down = false; }
-	//
-	//}
 }
 
 void Scene_Game::sAnimation()
@@ -740,15 +807,8 @@ void Scene_Game::onEnd()
 	MusicPlayer::getInstance().stop();
 	MusicPlayer::getInstance().play("menuTheme2");
 	MusicPlayer::getInstance().setVolume(15);
-	m_game->changeScene(SceneID::LEVELS, true);
-}
-
-void Scene_Game::drawLine()
-{
-}
-
-void Scene_Game::sDebug()
-{
+	m_game->changeScene(SceneID::MENU, true);
+	globalScore = 0;
 }
 
 sf::Vector2f Scene_Game::gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity)
@@ -771,7 +831,6 @@ void Scene_Game::loadLevel(const std::string& path)
 
 	spawnPlayer();
 	spawnEnemies();
-
 
 }
 
@@ -843,6 +902,17 @@ void Scene_Game::loadFromFile(const std::string& path)
 			m_enemyConfigVec.push_back(enemy);
 		}
 
+		else if (token == "Bonus")
+		{
+			int minX, maxX, minY, maxY;
+
+			confFile >>
+				minX >> maxX >> minY >> maxY;
+			
+			m_coordinatesConfig.push_back(std::pair<int, int>(minX, maxX));
+			m_coordinatesConfig.push_back(std::pair<int, int>(minY, maxY));
+		}
+
 		else if (token == "#")
 		{
 			// ignore comments
@@ -868,6 +938,34 @@ void Scene_Game::spawnPlayer()
 	m_player->addComponent<CBoundingBox>(sf::Vector2f(50, 50));
 	m_player->addComponent<CState>();
 	m_player->addComponent<CScore>(0);
+
+}
+
+void Scene_Game::spawnBonus()
+{
+	auto tiles = m_entityManager.getEntities("tileGrass");
+	int size = tiles.size();
+	std::uniform_int_distribution randX(0, size);
+	auto x = randX(rng);
+	int stop{0}; 
+
+	for (auto tile : tiles) {
+		if (x == stop) {
+			auto tilePosx = floor(tile->getComponent<CTransform>().pos.x / 64);
+			auto tilePosy = floor((2048 - tile->getComponent<CTransform>().pos.y) / 64);
+			auto bonus = m_entityManager.addEntity("bonus");
+			bonus->addComponent<CAnimation>(m_game->assets().getAnimation("Star"), true, false);
+			bonus->addComponent<CTransform>(gridToMidPixel(tilePosx, tilePosy, bonus));
+			bonus->addComponent<CBoundingBox>(sf::Vector2f(50, 50));
+			bonus->addComponent<CState>();
+			bonus->addComponent<CLifespan>(1000);
+			stop++;
+			return;
+		}
+		stop++;
+	}
+
+	
 
 }
 
@@ -901,27 +999,38 @@ void Scene_Game::spawnPoop(sf::Vector2f pos)
 	enemyObstacle->addComponent<CTransform>(gridToMidPixel(pos.x, pos.y, enemyObstacle));
 	auto posN = enemyObstacle->getComponent<CTransform>().pos;
 	std::cout << posN.x << ", " << posN.y <<"\n";
-	//enemyObstacle->addComponent<CLifespan>(10000);
+	enemyObstacle->addComponent<CLifespan>(3000);
 }
 
-void Scene_Game::moveEnemies() 
+void Scene_Game::bonusCollisions()
 {
-	
-}
-
-void Scene_Game::addPlayerPoints(int tiles)
-{
-	int cutTiles = 0;
-	for (auto grass : m_entityManager.getEntities("tileGrass")) {
-		if (grass->getComponent<CAnimation>().animation.getName() == "Short")
-			cutTiles += 1;			
+	if (m_player->hasComponent<CBoundingBox>()) {
+		for (auto e : m_entityManager.getEntities("bonus"))
+		{
+			auto overlap = Physics::getOverlap(m_player, e);
+			if (overlap.x > 0 && overlap.y > 0)
+			{
+				bonus += 1;
+				SoundPlayer::getInstance().play("bonus");
+				e->destroy();
+			}
+		}
 	}
-	if (cutTiles > 10) 
-		cutTiles += 10;
-	
+}
 
+void Scene_Game::addPlayerPoints()
+{
+	int cutTiles{ 0 };
+	int numTilesInARow{ 0 };
+	for (auto grass : m_entityManager.getEntities("tileGrass")) {
+		if (grass->getComponent<CAnimation>().isShort) {
+			cutTiles += 1;
+		}
+	}
+	cutTiles += (bonus * 50);
+	if (negativePoints > 0)
+		cutTiles -= negativePoints;
 	m_player->getComponent<CScore>().score = cutTiles;
-
 }
 
 bool Scene_Game::checkIfWon()

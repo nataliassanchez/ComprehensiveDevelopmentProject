@@ -20,6 +20,7 @@ private:
     sf::Music						m_music;
     std::map<String, String>	    m_filenames;
     float							m_volume{ 25 };
+    bool                            m_isPlaying{ true };
 
 public:
     static MusicPlayer& getInstance();

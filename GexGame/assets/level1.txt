@@ -1,5 +1,4 @@
 
-Window 1728 704
 
 Tile	  Fence2 2 4
 Tile	  Fence2 2 5
@@ -285,3 +284,5 @@ Dec House 12 7
 
 #     gX, gY, sX, sM,  
 Player 5   9   5  20 
+#    minx maxx miny maxy
+Bonus 3     26   5    9
