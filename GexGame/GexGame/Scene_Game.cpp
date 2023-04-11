@@ -586,7 +586,8 @@ void Scene_Game::sRender()
 				m_game->window().setView(view);
 				m_game->window().clear();
 				m_game->window().draw(m_background);
-				
+				rec.setFillColor(sf::Color(255, 255, 255, 255));
+				m_statisticsScore.setFillColor(sf::Color(255, 255, 255, 255));
 				m_background.setTexture(m_game->assets().getTexture("Victory"));
 				m_background.setPosition(0.f, 0.f);
 
